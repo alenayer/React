@@ -3,11 +3,12 @@ import { useState } from 'react';
 import './App.css'
 import BurgerButton from './components/BurgerButton'
 import Title from './components/Title'
+import Posts from './components/Posts';
 
 function App() {
-  const [state, setState] = useState<'active'|'inactive'>('inactive');  //хранит текущее состояние кнопки
-  const handleClick = ()=>{    //переключатель из одного состояния в другое
-    setState(state==='active'?'inactive':'active')
+  const [state, setState] = useState<'active' | 'inactive'>('inactive');  //хранит текущее состояние кнопки
+  const handleClick = () => {    //переключатель из одного состояния в другое
+    setState(state === 'active' ? 'inactive' : 'active')
   }
 
   return (
@@ -16,7 +17,11 @@ function App() {
         <Title content='sign in' />
       </div>
 
-      <BurgerButton state={state} onClick={handleClick}/>
+      <BurgerButton state={state} onClick={handleClick} />
+
+      <div>
+        <Posts />
+      </div>
     </>
   )
 }
