@@ -1,0 +1,46 @@
+.post__wrapper {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    max-width: 1170px;
+    width: 100%;
+    margin: 0 auto;
+    background-color: #eee;
+    gap: 10px;
+
+}
+
+.post__card {
+    border: 1px solid grey;
+    padding: 10px;
+    margin: 20px auto;
+    display: flex;
+    gap: 10px;
+}
+
+.post__image {
+    width: 100%;
+    height: 300px;
+    object-fit: contain;
+}
+
+.post__content {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.post__title {
+    font-size: bold;
+    margin-bottom: 20px;
+}
+
+.post__text {
+    margin-bottom: 40px;
+}
+
+.post__date {
+    color: rgb(187, 181, 181);
+    margin-bottom: 30px;
+}
