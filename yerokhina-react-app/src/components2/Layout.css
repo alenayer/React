@@ -1,0 +1,50 @@
+.layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+     
+ }
+ 
+ .header {
+     width: 100%;
+     background-color: blue;
+     height: 40px;
+     /* padding: 15px 0; */
+ }
+ 
+ .layout__content{
+     margin: 30px auto;
+     max-width: 800px;
+     width: 100%;
+     padding: 0  20px;
+ }
+ .layout__btn{
+     padding: 8px 16px;
+     background-color: #e0e0e0;
+     border: none;
+     font-size: 14px;
+ }
+ .layout__title{
+     margin-bottom: 20px;
+     font-size: 36px;
+     text-align: center;
+ }
+ 
+ .light__theme,
+ .light__inner{
+     background-color: white;
+     color: #333;
+ }
+ 
+ .dark__theme,
+ .dark__inner{
+     background-color: black;
+     color: white;
+ }
+ 
+ 
+ .dark__inner .success__textarea{
+ background-color: black;
+ color: white;
+ border: none;
+ }
