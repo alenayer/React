@@ -1,0 +1,20 @@
+.success__mode{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.success__textarea{
+    padding: 15px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    min-height: 100px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.success__btn{
+    padding: 12px;
+    background-color: blue;
+    color: white;
+    font-size: 16px;
+}
