@@ -1,5 +1,6 @@
 import './App2.css'
-import { Layout } from './components2/Layout'
+// import { Layout } from './components2/Layout'
+import { Layout } from './components3/Layout'
 import {useState} from 'react';
 import { RegForm } from './components2/RegForm';
 import { SuccessMode } from './components2/SuccessMode';

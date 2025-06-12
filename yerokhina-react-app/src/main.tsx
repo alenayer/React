@@ -9,6 +9,6 @@ import App4 from './App4';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App4 />
+    <App2 />
   </StrictMode>,
 )

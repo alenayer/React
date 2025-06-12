@@ -19,9 +19,19 @@
     border: 1px solid #ddd;
 }
 
+
 .submit__btn{
     padding: 12px;
     background-color: blue;
     margin-bottom: 20px;
     color: white;
+}
+
+.form__error-message{
+color: red;
+max-width: 50%;
+width: 100%;
+margin: 0 auto;
+background-color: aquamarine;
+padding: 5px 0;
 }
