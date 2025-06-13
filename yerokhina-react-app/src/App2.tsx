@@ -4,15 +4,32 @@ import { Layout } from './components3/Layout'
 import {useState} from 'react';
 import { RegForm } from './components2/RegForm';
 import { SuccessMode } from './components2/SuccessMode';
+import { useTheme } from './contexts/ThemeContext';
 
 export function App() {
   const [isRegistered, setIsRegistered] = useState(false);
+  const{theme, setTheme} = useTheme(); //получаем тему и Ф для ее изменения
+
+  // Обработчик регистрации меняет состояние и тему
+  const handleRegister = ()=>{
+    setIsRegistered(true);
+    if(setTheme){
+      setTheme('dark'); //меняем тему на темную после регистрации
+    }
+    
+  }
+  // Обработчик возврата меняет состояние и тему
+  const handleReturn = ()=>{
+    setIsRegistered(false);
+    setTheme('light')
+  }
+ 
   return (
     <Layout
      title={isRegistered ? 'Registration confirmation' : 'Sign up'}
-     theme={isRegistered ? 'dark' : 'light'}
+     theme={theme}  //используем тему из контекста
      >
-      {isRegistered ? (<SuccessMode onReturn={()=>setIsRegistered(false)} />) : (<RegForm onSubmit={() => setIsRegistered(true)} />)}
+      {isRegistered ? (<SuccessMode onReturn={handleReturn} />) : (<RegForm onSubmit={handleRegister} />)}
     </Layout>
   )
 
