@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './RegForm.css'
 
 
@@ -7,18 +7,31 @@ interface RegFormProps {
 }
 
 export const RegForm = ({ onSubmit }: RegFormProps) => {
-    // Данные  формы
+
+    // Refs для управления фокусом в инпутах
+    const usernameRef = useRef<HTMLInputElement>(null);
+    const emailRef = useRef<HTMLInputElement>(null);
+    const passwordRef = useRef<HTMLInputElement>(null);
+    const confirmPasswordRef = useRef<HTMLInputElement>(null);
+
+    // Состояния полей формы
+
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-   
 
-    // состояние ошибок
-    const[userNameError, setUserNameError] = useState('');
-    const[emailError, setEmailError] = useState('');
-    const[passwordError, setPasswordError] = useState('');
-    const[confirmPasswordError, setConfirmPasswordError] = useState('');
+
+    // Автофокус на поле username при загрузке формы
+    useEffect(() => {
+        usernameRef.current?.focus();
+    }, [])
+
+    // Состояния ошибок
+    const [userNameError, setUserNameError] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
     //обработчики изменений для всех полей
     const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,9 +46,9 @@ export const RegForm = ({ onSubmit }: RegFormProps) => {
     const handleConfirmPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setConfirmPassword(event.target.value);
     }
-    
 
-   
+
+
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault(); //предоствратили перезагрузку стр
 
@@ -46,39 +59,38 @@ export const RegForm = ({ onSubmit }: RegFormProps) => {
         setConfirmPasswordError('')
 
 
-         // проверка формы перед отправкой
+        // проверка формы перед отправкой
         let validated = true;
-        
+
 
         // Проверки на пустоту
         if (!username.trim()) {
-           setUserNameError('Введите имя пользователя');
-           validated=false;
+            setUserNameError('Введите имя пользователя');
+            validated = false;
         }
         if (!password) {
             setPasswordError('Введите пароль');
-           validated=false;
+            validated = false;
         }
-       
+
         if (!email.trim() || !email.includes('@')) {
             setEmailError('Введите корректный Email');
+            validated = false;
         }
-        
+
         if (!confirmPassword || password !== confirmPassword) {
             setConfirmPasswordError('Пароли не совпадают');
-           validated=false;
+            validated = false;
         }
 
         //    все ок -> чистим ошибки
-        if(validated){
+        if (validated) {
             onSubmit();
         }
-        
+
     }
     return (
         <form className="reg__form" onSubmit={handleSubmit}>
-
-           
             <div className="form__group">
                 <label htmlFor="username">Username</label>
                 <input
@@ -87,43 +99,47 @@ export const RegForm = ({ onSubmit }: RegFormProps) => {
                     value={username}
                     onChange={handleUsernameChange}
                     placeholder="Enter your name"
-                   />
-                     {userNameError&&<div className='form__error-message'>{userNameError}</div>}
+                   ref={usernameRef}
+                />
+                {userNameError && <div className='form__error-message'>{userNameError}</div>}
             </div>
             <div className="form__group">
                 <label htmlFor="email">Email</label>
                 <input
-                 type="email"
-                  id="email"
-                  value={email}
+                    type="email"
+                    id="email"
+                    value={email}
                     onChange={handleEmailChange}
-                  placeholder="Enter your email"
-                 
-                  />
-                  
-                  {emailError&&<div className='form__error-message'>{emailError}</div>}
+                    placeholder="Enter your email"
+                    ref={emailRef}
+
+                />
+
+                {emailError && <div className='form__error-message'>{emailError}</div>}
             </div>
             <div className="form__group">
                 <label htmlFor="password">Password</label>
                 <input
-                 type="password"
-                  id="password"
-                  value={password}
+                    type="password"
+                    id="password"
+                    value={password}
                     onChange={handlePasswordChange}
-                   placeholder="Create a password"
-                    />
-                   {passwordError&&<div className='form__error-message'>{passwordError}</div>}
+                    placeholder="Create a password"
+                    ref={passwordRef}
+                />
+                {passwordError && <div className='form__error-message'>{passwordError}</div>}
             </div>
             <div className="form__group">
                 <label htmlFor="confirm-password">Confirm Password</label>
                 <input
-                 type="password"
-                  id="confirm-password"
-                  value={confirmPassword}
+                    type="password"
+                    id="confirm-password"
+                    value={confirmPassword}
                     onChange={handleConfirmPasswordChange}
-                   placeholder="Repeat your password"
-                    />
-                   {confirmPasswordError&&<div className='form__error-message'>{confirmPasswordError}</div>}
+                    placeholder="Repeat your password"
+                    ref={confirmPasswordRef}
+                />
+                {confirmPasswordError && <div className='form__error-message'>{confirmPasswordError}</div>}
             </div>
 
             <button
