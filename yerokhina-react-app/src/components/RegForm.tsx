@@ -66,24 +66,29 @@ export const RegForm = ({ onSubmit }: RegFormProps) => {
         // Проверки на пустоту
         if (!username.trim()) {
             setUserNameError('Введите имя пользователя');
+            usernameRef.current?.focus();
             validated = false;
         }
-        if (!password) {
-            setPasswordError('Введите пароль');
+      
+        if (!email.trim() || !email.includes('@')) {
+            setEmailError('Введите корректный Email');
+            if(validated) emailRef.current?.focus();  //фокус только если нет предыдущих ошибок
             validated = false;
         }
 
-        if (!email.trim() || !email.includes('@')) {
-            setEmailError('Введите корректный Email');
+        if (!password) {
+            setPasswordError('Введите пароль');
+            if(validated) passwordRef.current?.focus();
             validated = false;
         }
 
         if (!confirmPassword || password !== confirmPassword) {
             setConfirmPasswordError('Пароли не совпадают');
+            if(validated) confirmPasswordRef.current?.focus();
             validated = false;
         }
 
-        //    все ок -> чистим ошибки
+        //    все ок -> 
         if (validated) {
             onSubmit();
         }

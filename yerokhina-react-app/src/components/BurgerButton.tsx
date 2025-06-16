@@ -1,3 +1,4 @@
+// import { useTheme } from '../contexts/ThemeContext';
 import './BurgerButton.css'
 
 interface  BurgerButtonProps {
@@ -7,17 +8,20 @@ interface  BurgerButtonProps {
 
 
 const BurgerButton= ({onClick,state}:BurgerButtonProps)=>{
+    // const{theme} = useTheme();
     return (
-        <button className={`burger-button ${state}`}
+      
+        <button className={`burger__button ${state}` }
         onClick={onClick}
         >
             {state === 'active'? 
             ('X')
             :(
-             <div className="burger-lines">
-                <div className="burger-line"></div>
-                <div className="burger-line"></div>
-                <div className="burger-line"></div>
+             <div className="burger__lines">
+                  <div className='burger__line'></div>
+                  <div className='burger__line'></div>
+                  <div className='burger__line'></div>
+                
              </div>
             )
             }

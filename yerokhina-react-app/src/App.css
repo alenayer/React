@@ -1,8 +1,15 @@
 #root {
-  max-width: 1280px;
-  /* margin: 0 auto; */
+  width: 100%;;
+  margin: 0 auto;
   padding: 2rem;
   text-align: center;
 }
 
 
+.form-block,
+.posts-block{
+  width: 100%;
+  margin: 0 auto 30px;
+  padding: 20px;
+
+}

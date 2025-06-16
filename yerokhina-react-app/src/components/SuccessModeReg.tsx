@@ -1,10 +1,10 @@
-import './SuccessMode.css'
+import './SuccessModeReg.css'
 
-interface SuccessModeProps{
+interface SuccessModeRegProps{
     onReturn:()=>void;
 }
 
-export const SuccessMode = ({onReturn}:SuccessModeProps) =>{
+export const SuccessModeReg = ({onReturn}:SuccessModeRegProps) =>{
 return(
     <div className='success__mode'>
         <textarea className="success__textarea" value="Your account has been successfully created!"></textarea>

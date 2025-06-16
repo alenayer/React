@@ -1,16 +1,17 @@
 import './Layout.css'
 import { useState, type PropsWithChildren } from 'react';
 import BurgerButton from './BurgerButton';
+import { useTheme } from '../contexts/ThemeContext';
 
 
 interface LayoutProps {
     title: string;
-    theme?: 'dark' | 'light';
-
+    
 }
 
-export const Layout = ({ title, theme = 'light', children }: PropsWithChildren<LayoutProps>) => {   //дестр-м обьект 
+export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {   //дестр-м обьект 
     const [menuState, setMenuState] = useState<'active' | 'inactive'>('inactive');  //хранит текущее состояние кнопки
+    const{theme} = useTheme(); //получаем из контекста (contextTheme - переимнованное Theme чтоб не конфликтовало с пропсом)
     const handleClick = () => {    //переключатель из одного состояния в другое
         setMenuState(menuState === 'active' ? 'inactive' : 'active')
     }
