@@ -1,6 +1,7 @@
 import { useState, useEffect, type ChangeEvent } from 'react';
 import './AllPosts.css';
-import { useTheme } from '../contexts/ThemeContext';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useNavigate } from 'react-router';
 
 
 type Post = {
@@ -13,34 +14,28 @@ type Post = {
     author: number
 }
 
-type AllPostsProps = {
-    onPostSelect: (id: number) => void;
-}
-
-
-const AllPosts = ({ onPostSelect }: AllPostsProps) => {
+const AllPosts = () => {
+    const navigate = useNavigate();
   const{theme} = useTheme();
-    const [allPosts, setAllPosts] = useState<Post[]>([]);  //все посты с сервера
-    const [displayedPosts, setDisplayedPosts] = useState<Post[]>([]);  //отображаемые посты
-
-
-    const [loading, setLoading] = useState<boolean>(false)
+    const [posts, setPosts] = useState<Post[]>([]);  //все посты с сервера
     const [search, setSearch] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string>('');
-
+   
+   
     useEffect(() => {
-        setLoading(true);
-        // Функция загрузки данных
+     
         const fetchPosts = async () => {
             try {
+                setLoading(true);
                 const response = await fetch('https://studapi.teachmeskills.by/blog/posts/');
                 if (!response.ok) {
                     setError(`Ошибка: ${response.status} ${response.statusText}`);
                     return; //просто выходим при ошибке
                 }
                 const data = await response.json()
-                setAllPosts(data.results);
-                setDisplayedPosts(data.results);   //изначально показываем ВСЕ посты
+                setPosts(data.results);
+               
 
             } catch (err) {
                 setError(String(err) || 'Не удалось загрузить посты');
@@ -52,24 +47,19 @@ const AllPosts = ({ onPostSelect }: AllPostsProps) => {
 
     }, []);
     // Фильтрация при изменении поиска
-    useEffect(() => {
-        if (search.trim() === '') {
-            setDisplayedPosts(allPosts); //Показываем ВСЕ если поиск пустой
-        } else {
-            const newPosts = [...allPosts].filter((post) =>
-                post.title.toLowerCase().includes(search.toLowerCase()) ||
-                post.text.toLowerCase().includes(search.toLowerCase())
-            );
-            setDisplayedPosts(newPosts);
-        }
-
-    }, [search, allPosts])
+    const filteredPosts = search ?
+    posts.filter(post=>
+        post.title.toLowerCase().includes(search.toLowerCase()) ||
+        post.text.toLowerCase().includes(search.toLowerCase())
+    )
+    :
+    posts;
 
     const searchHandler = (event: ChangeEvent<HTMLInputElement>) => {
         setSearch(event.target.value)
     }
     return (
-        <div className={`posts__wrapper ${theme==='dark'?'dark__inner':'light__inner'}`}>
+        <div className={`posts__wrapper ${theme}-theme`}>
 
             <div className='posts__search-container'>
                 <input
@@ -79,7 +69,7 @@ const AllPosts = ({ onPostSelect }: AllPostsProps) => {
                     value={search}
                     onChange={searchHandler} />
 
-                {search && (<div className='search__info'>Найдено:{displayedPosts.length} постов</div>)}
+                {search && (<div className='search__info'>Найдено:{filteredPosts.length} постов</div>)}
             </div>
 
             {error && <p className='posts__error-message'>{error}</p>}
@@ -89,12 +79,12 @@ const AllPosts = ({ onPostSelect }: AllPostsProps) => {
                 {loading ?
                     (<p>Loading...</p>)
                     :
-                    displayedPosts.length ?
-                        (displayedPosts.map(post => (
+                    filteredPosts.length ?
+                        (filteredPosts.map(post => (
                             <div
                                 key={post.id}
                                 className='post__card'
-                                onClick={() => onPostSelect(post.id)}
+                                onClick={() => navigate(`/posts/${post.id}`)}
                             >
                                 <div className='post__content'>
                                     <p className='post__date'>Date: {post.date}</p>

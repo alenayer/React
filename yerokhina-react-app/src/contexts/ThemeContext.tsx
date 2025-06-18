@@ -1,25 +1,30 @@
 import { createContext, useContext, useState, type PropsWithChildren } from 'react';
 
-type Theme = 'dark'|'light';
+type Theme = 'dark' | 'light';
 
-interface ThemeContextType{
-    theme:Theme;
-    setTheme:(theme: Theme)=>void;
+type ThemeContextType = {
+    theme: Theme;
+    setTheme: (theme: Theme) => void;
+    
 }
-const ThemeContext = createContext<ThemeContextType|undefined>(undefined)
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
-export const ThemeProvider = ({children}:PropsWithChildren<{}>)=>{
-    const[theme, setTheme] = useState<Theme>('light')
+export const ThemeProvider = ({ children }: PropsWithChildren<{}>) => {
+    const [theme, setTheme] = useState<Theme>('light')
 
-   
-    return(
-        <ThemeContext value={{theme, setTheme}}>
+    
+
+
+    return (
+        <ThemeContext value={{ theme, setTheme}}>
             {children}
         </ThemeContext>
     )
 }
-export const useTheme=()=>{
+export const useTheme = () => {
     const context = useContext(ThemeContext);
-    if(!context) throw new Error('useTheme должна использоваться с ThemeProvider');
-    return context
+    if (!context) {
+        throw new Error('useTheme должна использоваться с ThemeProvider');
+    }
+    return context;
 }

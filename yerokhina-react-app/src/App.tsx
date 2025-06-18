@@ -1,84 +1,53 @@
-
-import { useState } from 'react';
-import { Layout } from './components/Layout';
-import { SuccessMode } from './components/SuccessMode';
-import { SuccessModeReg } from './components/SuccessModeReg';
-import { SignInForm } from './components/SignInForm';
-import { RegForm } from './components/RegForm';
-import  AllPosts  from './components/AllPosts';
-import  SelectedPost  from './components/SelectedPost';
-import { useTheme } from './contexts/ThemeContext';
+import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router';
+import { Layout } from './components/Layout/Layout';
+import HomePage from './pages/HomePage';
+import SignInPage from './pages/SignInPage';
+import RegistrationPage from './pages/RegistrationPage';
+import PostsPage from './pages/PostsPage';
+import PostPage from './pages/PostPage';
 import './App.css'
+import NotFound from './components/NotFound/NotFound';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import type { ReactNode } from 'react';
+
 
 export default function App() {
-  const {setTheme } = useTheme();
-  
-  // Состояния для SignIn (как в App3)
-  const [isSignInSuccess, setIsSignInSuccess] = useState(false);
-  
-  // Состояния для Registration (как в App2)
-  const [isRegSuccess, setIsRegSuccess] = useState(false);
-  
-  // Состояния для Posts (как в App4)
-  const [showPost,setShowPost] = useState(false);
-  const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
-
-
-
   return (
-    <Layout title='MyApp'>
-      {/* Блок входа */}
-      <div className='form-block '>
-        <h2>{isSignInSuccess? 'Success': 'Sign In'}</h2>
-        {isSignInSuccess ? (
-          <SuccessMode onAction={() => {
-            setTheme('light');
-            setIsSignInSuccess(false);
-          }} />
-        ) : (
-          <SignInForm onSubmit={() => {
-            setTheme('dark');
-            setIsSignInSuccess(true);
-          }} />
-        )}
-      </div>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<LayoutWithOutlet title='MyApp' />} >
+            <Route index element={<HomePage />} />
+            <Route path='signin' element={<SignInPage />} />
+            <Route path='registration' element={<RegistrationPage />} />
+            <Route path='posts' element={
+              <PrivateRoute>
+                <PostsPage />
+              </PrivateRoute>
+            } />
+            <Route path='posts/:id' element={
+              <PrivateRoute>
+                <PostPage />
+              </PrivateRoute>
 
-      {/* Блок регистрации */}
-      <div className="form-block">
-        <h2>{isRegSuccess?'Registration Confirmation': 'Sign Up'}</h2>
-        {isRegSuccess ? (
-          <SuccessModeReg onReturn={() => {
-            setTheme('light');
-            setIsRegSuccess(false);
-          }} />
-        ) : (
-          <RegForm onSubmit={() => {
-            setTheme('dark');
-            setIsRegSuccess(true);
-          }} />
-        )}
-      </div>
-
-      {/* Блок постов */}
-      <div className="posts-block">
-        <h2>{showPost? 'Selected Post': 'All posts'}</h2>
-        {showPost? (
-          <SelectedPost 
-            postId={selectedPostId} 
-            onBack={() => {
-              setShowPost(false);
-              setTheme('light');
-            }} 
-          />
-        ) :(<AllPosts onPostSelect={(id) => {
-            setSelectedPostId(id);
-            setShowPost(true);
-            setTheme('dark');
-          }} />
-        
-          
-        )}
-      </div>
-    </Layout>
+            } />
+            <Route path='*' element={<NotFound />} />
+          </Route>
+        </Routes>
+      </BrowserRouter >
+    </AuthProvider>
   );
+}
+
+const LayoutWithOutlet = ({ title }: { title: string }) => {
+  return (
+    <Layout title={title}>
+      <Outlet />
+    </Layout>
+  )
+}
+
+const PrivateRoute = ({ children }: {children:ReactNode}) => {
+  const { isAuth } = useAuth();
+  return isAuth ? children : <Navigate to='/signin' replace />
 }
