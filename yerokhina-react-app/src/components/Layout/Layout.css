@@ -1,7 +1,24 @@
+*{
+    box-sizing: border-box;
+}
+
 .layout {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    position: relative;
+}
+.layout::after {
+   content: '';
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background-color: rgba(0,0,0,0.5);
+   opacity: 0;
+   visibility: hidden;
+   
 }
 
 .header {
@@ -9,8 +26,13 @@
     height: 60px;
     background-color: blue;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 0 20px;
+    z-index: 1;
 }
 
 .header-right,
@@ -18,7 +40,11 @@
     display: flex;
     align-items: center;
     gap: 15px;
+    height: 100%;
 
+}
+.app__logo{
+    color: aqua;
 }
 
 .header__link {
@@ -34,11 +60,10 @@
 }
 
 .layout__content {
-    margin: 0 auto;
+    margin: 80px auto 0; 
     max-width: 800px;
     width: 100%;
     padding: 20px;
-
 }
 
 .layout__btn {
@@ -72,6 +97,39 @@
     background-color: black;
     color: white;
     border: none;
+}
+
+.side-menu{
+    position: fixed;
+    top: 0;
+    left: -300px;
+    /* скрыто за левым краем */
+    height: 100%;
+    width: 250px;
+    padding-top: 80px;
+    /* тступ под header */
+    background-color: blue;
+}
+.side-menu.active{
+    left: 0;
+    /* показываем */
+}
+.side-menu.active ~.layout::after{
+   opacity: 1;
+   visibility: visible;
+}
+.side-menu__nav{
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+.side-menu__link{
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+
 }
 
 .footer {
