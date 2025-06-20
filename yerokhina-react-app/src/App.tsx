@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router';
+import { BrowserRouter, Outlet, Route, Routes } from 'react-router';
 import { Layout } from './components/Layout/Layout';
 import HomePage from './pages/HomePage';
 import SignInPage from './pages/SignInPage';
@@ -7,8 +7,8 @@ import PostsPage from './pages/PostsPage';
 import PostPage from './pages/PostPage';
 import './App.css'
 import NotFound from './components/NotFound/NotFound';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import type { ReactNode } from 'react';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
+import { AuthProvider } from './contexts/AuthContext';
 
 
 export default function App() {
@@ -47,7 +47,3 @@ const LayoutWithOutlet = ({ title }: { title: string }) => {
   )
 }
 
-const PrivateRoute = ({ children }: {children:ReactNode}) => {
-  const { isAuth } = useAuth();
-  return isAuth ? children : <Navigate to='/signin' replace />
-}

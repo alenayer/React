@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 export const useAuth = ()=>{
     const context = useContext(AuthContext);
     if (!context) {
-        throw new Error('useTheme должна использоваться с ThemeProvider');
+        throw new Error('useAuth должна использоваться внутри AuthProvider');
     }
     return context;
 }

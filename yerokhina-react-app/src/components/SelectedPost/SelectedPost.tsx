@@ -63,12 +63,11 @@ return (
             Back to All Posts
         </button>
 
-        {loading?
-        (<div>Loading post...</div>)
-    : error?
-    (<div className='error'>{error}</div>)
-    :
-    post ? (
+        {loading && <div>Loading post...</div>}
+        {error && <div className='error'>{error}</div>}
+        {!loading && !error && !post && <div>No post found.</div>}
+    
+    {post && (
                 <div className='post__card'>
                     <div className='post__content'>
                         <p className='post__date'>Date: {post.date}</p>
@@ -77,7 +76,6 @@ return (
                         <p>Lesson: {post.lesson_num}</p>
                         <p>Author ID: {post.author}</p>
                     </div>
-                    {/* условный рендеринг для изображения */}
                     {post.image && (
                         <div className='post__image-wrapper'>
                             <img
@@ -87,9 +85,6 @@ return (
                         </div>
                     )}
                 </div>
-            ) 
-            :
-            (<div>No post found.</div>
             )}
     </div>
 );
