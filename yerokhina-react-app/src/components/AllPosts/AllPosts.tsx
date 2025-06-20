@@ -16,15 +16,15 @@ type Post = {
 
 const AllPosts = () => {
     const navigate = useNavigate();
-  const{theme} = useTheme();
+    const { theme } = useTheme();
     const [posts, setPosts] = useState<Post[]>([]);  //все посты с сервера
     const [search, setSearch] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string>('');
-   
-   
+
+
     useEffect(() => {
-     
+
         const fetchPosts = async () => {
             try {
                 setLoading(true);
@@ -35,7 +35,7 @@ const AllPosts = () => {
                 }
                 const data = await response.json()
                 setPosts(data.results);
-               
+
 
             } catch (err) {
                 setError(String(err) || 'Не удалось загрузить посты');
@@ -48,12 +48,12 @@ const AllPosts = () => {
     }, []);
     // Фильтрация при изменении поиска
     const filteredPosts = search ?
-    posts.filter(post=>
-        post.title.toLowerCase().includes(search.toLowerCase()) ||
-        post.text.toLowerCase().includes(search.toLowerCase())
-    )
-    :
-    posts;
+        posts.filter(post =>
+            post.title.toLowerCase().includes(search.toLowerCase()) ||
+            post.text.toLowerCase().includes(search.toLowerCase())
+        )
+        :
+        posts;
 
     const searchHandler = (event: ChangeEvent<HTMLInputElement>) => {
         setSearch(event.target.value)
@@ -72,50 +72,42 @@ const AllPosts = () => {
                 {search && (<div className='search__info'>Найдено:{filteredPosts.length} постов</div>)}
             </div>
 
+            {loading && <p>Loading...</p>}
             {error && <p className='posts__error-message'>{error}</p>}
+            {!loading && !error && filteredPosts.length === 0 && (
+                <p className='posts__no-results'>
+                    {search ? 'Ничего не найдено' : 'Нет доступных постов'}
+                </p>
+            )}
 
-            <div className='posts'>
-                {/* отрисовка карточек */}
-                {loading ?
-                    (<p>Loading...</p>)
-                    :
-                    filteredPosts.length ?
-                        (filteredPosts.map(post => (
-                            <div
-                                key={post.id}
-                                className='post__card'
-                                onClick={() => navigate(`/posts/${post.id}`)}
-                            >
-                                <div className='post__content'>
-                                    <p className='post__date'>Date: {post.date}</p>
-                                    <h2 className='post__title'>{post.title}</h2>
-                                    <p className='post__text'>{post.text}</p>
-                                    <p>Lesson: {post.lesson_num}</p>
-                                    <p>Author ID: {post.author}</p>
-                                </div>
-
-                                {/* условный рендеринг для изображения */}
-                                {post.image && (
-                                    <div className='post__image-wrapper'>
-                                        <img
-                                            className="post__image"
-                                            src={post.image}
-                                            alt={post.title} />
-                                    </div>
-                                )}
+            {!loading && !error && filteredPosts.length > 0 && (
+                <div className='posts'>
+                    {filteredPosts.map(post => (
+                        <div
+                            key={post.id}
+                            className='post__card'
+                            onClick={() => navigate(`/posts/${post.id}`)}
+                        >
+                            <div className='post__content'>
+                                <p className='post__date'>Date: {post.date}</p>
+                                <h2 className='post__title'>{post.title}</h2>
+                                <p className='post__text'>{post.text}</p>
+                                <p>Lesson: {post.lesson_num}</p>
+                                <p>Author ID: {post.author}</p>
                             </div>
-                        ))
-                        )
-                        :
-                        (<p className='posts__no-results'>
-                            {search ?
-                                'Ничего не найдено' :   //если Displayed пуст после фильтрации(поиск не пустой но ни один пост не соотв-т)
-                                'Нет доступных постов'}   
-                                {/* если поиск пустой(неактивен) или массив постов пуст-сервер не вернул */}
-                        </p>)
-                }
-            </div>
 
+                            {post.image && (
+                                <div className='post__image-wrapper'>
+                                    <img
+                                        className="post__image"
+                                        src={post.image}
+                                        alt={post.title} />
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };

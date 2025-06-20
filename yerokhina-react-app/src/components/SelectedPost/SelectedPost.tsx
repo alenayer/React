@@ -17,7 +17,7 @@ type Post = {
 const SelectedPost = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const{theme}=useTheme();
+    const { theme } = useTheme();
     const [post, setPost] = useState<Post | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -32,7 +32,7 @@ const SelectedPost = () => {
                 }
                 const response = await fetch(`https://studapi.teachmeskills.by/blog/posts/${id}`);
 
-                if(!response.ok){
+                if (!response.ok) {
                     setError(`Error: ${response.status} ${response.statusText}`)
                     setLoading(false);
                     return;
@@ -41,34 +41,33 @@ const SelectedPost = () => {
                 setPost(data);
 
             } catch (error) {
-            setError('Failed to load post');
-            } finally{
-            setLoading(false)
-        } 
+                setError('Failed to load post');
+            } finally {
+                setLoading(false)
+            }
+        };
+        fetchPost();
+
+    }, [id]);
+
+    const handleBack = () => {
+        navigate('/posts');
     };
-    fetchPost();
 
-}, [id]);
+    return (
+        <div className={`selected__post ${theme}__inner`}>
+            <button
+                onClick={handleBack}
+                className='back__btn'
+            >
+                Back to All Posts
+            </button>
 
-const handleBack = () => {
-    navigate('/posts');
-};
+            {loading && <div>Loading post...</div>}
+            {error && <div className='error'>{error}</div>}
+            {!loading && !error && !post && <div>No post found.</div>}
 
-return (
-    <div className={`selected__post ${theme}__inner`}>
-        <button
-            onClick={handleBack}
-            className='back__btn'
-        >
-            Back to All Posts
-        </button>
-
-        {loading?
-        (<div>Loading post...</div>)
-    : error?
-    (<div className='error'>{error}</div>)
-    :
-    post ? (
+            {post && (
                 <div className='post__card'>
                     <div className='post__content'>
                         <p className='post__date'>Date: {post.date}</p>
@@ -77,7 +76,6 @@ return (
                         <p>Lesson: {post.lesson_num}</p>
                         <p>Author ID: {post.author}</p>
                     </div>
-                    {/* условный рендеринг для изображения */}
                     {post.image && (
                         <div className='post__image-wrapper'>
                             <img
@@ -87,11 +85,8 @@ return (
                         </div>
                     )}
                 </div>
-            ) 
-            :
-            (<div>No post found.</div>
             )}
-    </div>
-);
+        </div>
+    );
 };
 export default SelectedPost;
