@@ -1,6 +1,11 @@
 .back__btn{
     padding: 8px 16px;
     margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    background-color: blue;
+    color: white;
+
     
 }
 
@@ -10,9 +15,3 @@
     padding: 20px;
 }
 
-.dark__theme .back__btn{
-    background-color: gray;
-    color: white;
-    border: 1px solid black;
-    background-color: blue;
-}

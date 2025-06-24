@@ -1,0 +1,20 @@
+.not-found{
+    text-align: center;
+    padding: 50px;
+}
+
+.not-found-title {
+    text-transform: uppercase;
+}
+
+.not-found__link{
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    text-decoration: none;
+    background-color: blue;
+    color: white;
+    
+    
+}
+
