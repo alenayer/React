@@ -2,8 +2,10 @@ import './Layout.css'
 import { useState, type PropsWithChildren } from 'react';
 import BurgerButton from '../BurgerButton/BurgerButton';
 import { NavLink, useNavigate } from 'react-router';
-import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTheme } from '../../contexts/ThemeContext';
+import { useAppSelector } from '../../store/store';
+
 
 
 interface LayoutProps {
@@ -13,9 +15,12 @@ interface LayoutProps {
 
 export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
     const [menuState, setMenuState] = useState<'active' | 'inactive'>('inactive');  //хранит текущее состояние кнопки
-    const { theme } = useTheme(); //получаем из контекста (contextTheme - переимнованное Theme чтоб не конфликтовало с пропсом)
+    const{theme,setTheme} = useTheme();  //получаем из контекста
     const navigate = useNavigate();
     const { isAuth, setAuth } = useAuth();
+    const themeApp = useAppSelector(state=>state.theme.mode)
+
+   
 
     const handleHomeClick = () => {
         navigate('/');
@@ -27,8 +32,16 @@ export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
         setMenuState(menuState === 'active' ? 'inactive' : 'active')
     }
 
+     // перекл темы
+     const handleThemeToggle =()=>{
+        const newTheme = themeApp === 'light' ? 'dark':'light';
+        setTheme(newTheme) //Обновили через контекст который диспатчит из Redux
+    }
+    
+
     return (
-        <div className={`layout ${theme}__theme`}>
+      
+        <div className={`layout ${themeApp==='dark'?'dark':''}__theme`}>
             <header className='header'>
                 <div className='header-left'>
                     <BurgerButton state={menuState} onClick={handleMenuClick} />
@@ -46,6 +59,8 @@ export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
                             <NavLink to='/signin' className={({ isActive }) => `header__link ${isActive ? 'active' : ''}`}>Sign In</NavLink>
                         </>
                         )}
+
+                        <button onClick={handleThemeToggle}>Поменять тему</button>
                 </div>
             </header>
             {/* Боковое меню */}
@@ -57,6 +72,7 @@ export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
                     <NavLink to='/signin' className='side-menu__link' onClick={()=>setMenuState('inactive')}>Sign In</NavLink>
                 </nav>
             </div>
+           
             {/* Основной контент */}
             <main className='layout__content'>
                 <button className='layout__btn'
@@ -66,7 +82,7 @@ export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
                 <div className={`layout__inner ${theme}__inner`}>{children}</div>
             </main>
             <footer className='footer'>
-                © 2023 MyApp. All rights reserved.
+                © 2025 MyApp. All rights reserved.
             </footer>
         </div>
     )

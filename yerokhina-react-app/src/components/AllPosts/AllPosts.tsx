@@ -2,17 +2,11 @@ import { useState, useEffect, type ChangeEvent } from 'react';
 import './AllPosts.css';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useNavigate } from 'react-router';
-
-
-type Post = {
-    id: number,
-    image?: string,
-    text: string,
-    date: string,
-    lesson_num: number,
-    title: string,
-    author: number
-}
+import type { Post } from '../../types/post';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import { openImagePreview, openPreview } from '../../store/postSlice';
+import PostPreview from '../PostPreview/PostPreview';
+import ImagePreview from '../ImagePreview/ImagePreview';
 
 const AllPosts = () => {
     const navigate = useNavigate();
@@ -22,9 +16,10 @@ const AllPosts = () => {
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string>('');
 
+    const dispatch = useAppDispatch();
+    const { isPreviewOpen, isImagePreviewOpen } = useAppSelector(state => state.post)
 
     useEffect(() => {
-
         const fetchPosts = async () => {
             try {
                 setLoading(true);
@@ -56,11 +51,33 @@ const AllPosts = () => {
         posts;
 
     const searchHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        setSearch(event.target.value)
+        setSearch(event.target.value);
+    }
+
+    const handleCardClick = (e: React.MouseEvent, post: Post) => {
+        // проверка был ли клик по кнопке или дочерним
+        const isButtonClick = (e.target as HTMLElement).closest('.post__preview-open')
+
+        if (!isButtonClick) {
+            e.stopPropagation();   //Предотвр-т всплытие
+            dispatch(openPreview(post));
+        }
+
+    }
+
+    const handleButtonClick = (e: React.MouseEvent, postId: number) => {
+        e.stopPropagation();
+        navigate(`/posts/${postId}`)
+    }
+
+    const handleImageClick = (e: React.MouseEvent, imageUrl: string|undefined) => {
+        e.stopPropagation();
+        if(!imageUrl)  return
+        dispatch(openImagePreview(imageUrl));
     }
     return (
         <div className={`posts__wrapper ${theme}-theme`}>
-
+            {/* основной контент с постами */}
             <div className='posts__search-container'>
                 <input
                     type="search"
@@ -86,9 +103,17 @@ const AllPosts = () => {
                         <div
                             key={post.id}
                             className='post__card'
-                            onClick={() => navigate(`/posts/${post.id}`)}
+                            onClick={(e) => handleCardClick(e, post)}
                         >
                             <div className='post__content'>
+                                <button
+                                    className='post__preview-open'
+                                    onClick={(e) => {
+                                        handleButtonClick(e, post.id)
+                                    }}
+                                >
+                                    View Full Page
+                                </button>
                                 <p className='post__date'>Date: {post.date}</p>
                                 <h2 className='post__title'>{post.title}</h2>
                                 <p className='post__text'>{post.text}</p>
@@ -97,15 +122,32 @@ const AllPosts = () => {
                             </div>
 
                             {post.image && (
-                                <div className='post__image-wrapper'>
+                                <div className='post__image-wrapper'
+                                    onClick={(e) => handleImageClick(e, post.image)}>
                                     <img
                                         className="post__image"
                                         src={post.image}
-                                        alt={post.title} />
+                                        alt={post.title}
+                                    />
                                 </div>
                             )}
                         </div>
                     ))}
+                </div>
+            )}
+
+
+            {/* модалка preview(рендерится только при isPreviewOpen) */}
+
+            {isPreviewOpen && (
+                <div className='post__preview-overlay'>
+                    <PostPreview />
+                </div>
+            )}
+
+            {isImagePreviewOpen && (
+                <div className='post__preview-overlay'>
+                    <ImagePreview />
                 </div>
             )}
         </div>

@@ -2,17 +2,9 @@ import { useState, useEffect } from 'react';
 import './SelectedPost.css';
 import { useNavigate, useParams } from 'react-router';
 import { useTheme } from '../../contexts/ThemeContext';
+import type { Post } from '../../types/post';
 
 
-type Post = {
-    id: number,
-    image?: string,
-    text: string,
-    date: string,
-    lesson_num: number,
-    title: string,
-    author: number
-}
 
 const SelectedPost = () => {
     const { id } = useParams<{ id: string }>();
