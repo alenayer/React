@@ -4,43 +4,33 @@ import { useTheme } from '../../contexts/ThemeContext';
 import { useNavigate } from 'react-router';
 import type { Post } from '../../types/post';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { openImagePreview, openPreview } from '../../store/postSlice';
+import { disLikePost, likePost, openImagePreview, openPreview, setActiveTab } from '../../store/postSlice';
 import PostPreview from '../PostPreview/PostPreview';
 import ImagePreview from '../ImagePreview/ImagePreview';
+import { fetchPosts } from '../../store/postsThunk';
 
 const AllPosts = () => {
     const navigate = useNavigate();
     const { theme } = useTheme();
-    const [posts, setPosts] = useState<Post[]>([]);  //все посты с сервера
     const [search, setSearch] = useState<string>('');
-    const [loading, setLoading] = useState<boolean>(true)
-    const [error, setError] = useState<string>('');
+//    const [loading] = useState<boolean>(false)
+//     const [error ] = useState<string>(''); 
 
     const dispatch = useAppDispatch();
     const { isPreviewOpen, isImagePreviewOpen } = useAppSelector(state => state.post)
+    const {posts, activeTab,loading,error} = useAppSelector(state => state.post);
+
+    // сортировка для вкладки popular
+    const popularPosts = [...posts].sort((a,b)=>(b.likes-b.dislikes)-(a.likes-a.dislikes))
+    const displayedPosts = activeTab ==='all'?posts:popularPosts;
+
 
     useEffect(() => {
-        const fetchPosts = async () => {
-            try {
-                setLoading(true);
-                const response = await fetch('https://studapi.teachmeskills.by/blog/posts/');
-                if (!response.ok) {
-                    setError(`Ошибка: ${response.status} ${response.statusText}`);
-                    return; //просто выходим при ошибке
-                }
-                const data = await response.json()
-                setPosts(data.results);
+        dispatch(fetchPosts());
 
+    }, [dispatch]);
 
-            } catch (err) {
-                setError(String(err) || 'Не удалось загрузить посты');
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchPosts();
-
-    }, []);
+    
     // Фильтрация при изменении поиска
     const filteredPosts = search ?
         posts.filter(post =>
@@ -70,13 +60,31 @@ const AllPosts = () => {
         navigate(`/posts/${postId}`)
     }
 
-    const handleImageClick = (e: React.MouseEvent, imageUrl: string|undefined) => {
+    const handleImageClick = (e: React.MouseEvent, imageUrl: string | undefined) => {
         e.stopPropagation();
-        if(!imageUrl)  return
+        if (!imageUrl) return
         dispatch(openImagePreview(imageUrl));
+    }
+
+    const handleLikeClick = (id: number) => {
+        dispatch(likePost(id))
+    }
+    const handleDislikeClick = (id: number) => {
+        dispatch(disLikePost(id))
     }
     return (
         <div className={`posts__wrapper ${theme}-theme`}>
+            {/* переклюяатель табов */}
+            <div className='posts__tabs'>
+                <button className={activeTab==='all'?'active':''}
+                onClick={()=>dispatch(setActiveTab('all'))}
+                >All posts</button>
+                </div>
+            <div className='posts__tabs'>
+                <button className={activeTab==='popular'?'active':''}
+                onClick={()=>dispatch(setActiveTab('popular'))}
+                >Popular posts</button>
+            </div>
             {/* основной контент с постами */}
             <div className='posts__search-container'>
                 <input
@@ -97,15 +105,14 @@ const AllPosts = () => {
                 </p>
             )}
 
-            {!loading && !error && filteredPosts.length > 0 && (
+            {filteredPosts.length > 0 && (
                 <div className='posts'>
-                    {filteredPosts.map(post => (
+                    {displayedPosts.map(post => (
                         <div
                             key={post.id}
                             className='post__card'
-                            onClick={(e) => handleCardClick(e, post)}
                         >
-                            <div className='post__content'>
+                            <div className='post__content' onClick={(e) => handleCardClick(e, post)}>
                                 <button
                                     className='post__preview-open'
                                     onClick={(e) => {
@@ -131,6 +138,25 @@ const AllPosts = () => {
                                     />
                                 </div>
                             )}
+                            <div className='vote-buttons'>
+                                <button onClick={() => handleLikeClick(post.id)}
+                                    className='vote-button like-button'
+                                >
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
+                                    </svg>
+                                    <span>{post.likes}</span>
+
+                                </button>
+                                <button onClick={() => handleDislikeClick(post.id)}
+                                    className='vote-button dislike-button'
+                                >
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17" />
+                                    </svg>
+                                    <span>{post.dislikes}</span>
+                                </button>
+                            </div>
                         </div>
                     ))}
                 </div>

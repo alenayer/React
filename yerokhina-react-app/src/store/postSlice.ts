@@ -1,5 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { Post } from "../types/post";
+import { fetchPosts } from "./postsThunk";
 
 
 type PostState = {
@@ -8,6 +9,14 @@ type PostState = {
     // для картинок
     selectedImage: string | null,
     isImagePreviewOpen: boolean,
+    // для лайков
+    posts: Post[],
+    // tabs
+    activeTab: 'all' | 'popular',
+
+    loading: boolean,
+    error: string | null,
+
 }
 
 const initialState: PostState = {
@@ -16,6 +25,11 @@ const initialState: PostState = {
     // для картинок
     selectedImage: null,
     isImagePreviewOpen: false,
+    // для лайков
+    posts: [],
+    activeTab: 'all',
+    loading: false,
+    error: null,
 }
 
 
@@ -41,6 +55,45 @@ const postSlice = createSlice({
             state.isImagePreviewOpen = false;
             state.selectedImage = null;
         },
+        likePost: (state, action: PayloadAction<number>) => {
+            state.posts = state.posts.map((el) => {
+                if (el.id === action.payload) {
+                    console.log(el.likes)
+                    return { ...el, likes: ++el.likes }
+                } else {
+                    return el;
+                }
+            })
+        },
+        disLikePost: (state, action: PayloadAction<number>) => {
+            state.posts = state.posts.map((el) => {
+                if (el.id === action.payload) {
+                    console.log(el.dislikes)
+                    return { ...el, dislikes: ++el.dislikes }
+                } else {
+                    return el;
+                }
+            })
+        },
+        // tabs
+        setActiveTab: (state, action: PayloadAction<'all' | 'popular'>) => {
+            state.activeTab = action.payload;
+        }
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchPosts.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchPosts.fulfilled, (state, action: PayloadAction<Post[]>) => {
+                state.loading = false;
+                state.posts = action.payload.map((el) => ({ ...el, likes: 0, dislikes: 0 }));
+            })
+            .addCase(fetchPosts.rejected, (state) => {
+                state.loading = false;
+                state.error = 'Ошибка загрузки постов'
+            })
     }
 })
 
@@ -48,6 +101,9 @@ export const {
     openPreview,
     closePreview,
     openImagePreview,
-    closeImagePreview } = postSlice.actions;
-    
+    closeImagePreview,
+    likePost,
+    disLikePost,
+    setActiveTab } = postSlice.actions;
+
 export default postSlice.reducer;

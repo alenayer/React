@@ -9,6 +9,7 @@ import './App.css'
 import NotFound from './components/NotFound/NotFound';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import { AuthProvider } from './contexts/AuthContext';
+import UsersPage from './pages/UsersPage';
 
 
 export default function App() {
@@ -18,6 +19,9 @@ export default function App() {
         <Routes>
           <Route path='/' element={<LayoutWithOutlet title='MyApp' />} >
             <Route index element={<HomePage />} />
+
+            <Route path='/users' element={<UsersPage />} />
+
             <Route path='signin' element={<SignInPage />} />
             <Route path='registration' element={<RegistrationPage />} />
             <Route path='posts' element={

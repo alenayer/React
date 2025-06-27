@@ -5,5 +5,7 @@ export type Post = {
     date: string,
     lesson_num: number,
     title: string,
-    author: number
+    author: number,
+    likes:number,
+    dislikes:number,
 }

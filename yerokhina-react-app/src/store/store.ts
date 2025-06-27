@@ -3,12 +3,14 @@ import counterReducer from './counterSlice'
 import { useDispatch, useSelector } from 'react-redux';
 import themeReducer from './themeSlice'
 import postReducer from './postSlice'
+import usersReducer  from './usersSlice';
 
 export const store = configureStore({
   reducer: {
     counter:counterReducer,
     theme:themeReducer,
     post:postReducer,
+    users:usersReducer,
   }
 });
 
