@@ -20,7 +20,7 @@ export default function App() {
           <Route path='/' element={<LayoutWithOutlet title='MyApp' />} >
             <Route index element={<HomePage />} />
 
-            <Route path='/users' element={<UsersPage />} />
+            <Route path='users' element={<UsersPage />} />
 
             <Route path='signin' element={<SignInPage />} />
             <Route path='registration' element={<RegistrationPage />} />

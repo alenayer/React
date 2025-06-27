@@ -11,9 +11,11 @@ type PostState = {
     isImagePreviewOpen: boolean,
     // для лайков
     posts: Post[],
+    //    для избранных
+    favorites: number[],  //массив ID выбранных постов
     // tabs
-    activeTab: 'all' | 'popular',
-
+    activeTab: 'all' | 'popular' | 'favorites',
+    // обработка
     loading: boolean,
     error: string | null,
 
@@ -22,11 +24,10 @@ type PostState = {
 const initialState: PostState = {
     selectedPost: null,
     isPreviewOpen: false,
-    // для картинок
     selectedImage: null,
     isImagePreviewOpen: false,
-    // для лайков
     posts: [],
+    favorites: [],
     activeTab: 'all',
     loading: false,
     error: null,
@@ -75,10 +76,20 @@ const postSlice = createSlice({
                 }
             })
         },
+         // Закладки
+         addToFavorites: (state, action: PayloadAction<number>) => {
+           if(!state.favorites.includes(action.payload)) {
+            state.favorites.push(action.payload);
+           }
+        },
+        removeFromFavorites: (state, action:PayloadAction<number>) =>{
+            state.favorites = state.favorites.filter(id=>id!==action.payload)
+        },
         // tabs
-        setActiveTab: (state, action: PayloadAction<'all' | 'popular'>) => {
+        setActiveTab: (state, action: PayloadAction<'all' | 'popular' | 'favorites'>) => {
             state.activeTab = action.payload;
-        }
+        },
+       
     },
     extraReducers: (builder) => {
         builder
@@ -104,6 +115,8 @@ export const {
     closeImagePreview,
     likePost,
     disLikePost,
+    addToFavorites,
+    removeFromFavorites,
     setActiveTab } = postSlice.actions;
 
 export default postSlice.reducer;
