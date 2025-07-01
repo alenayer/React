@@ -19,7 +19,7 @@ const AllPosts = () => {
     const { posts, activeTab, loading, error, favorites } = useAppSelector(state => state.post);
 
     // сортировка для вкладки popular
-    const popularPosts = [...posts].sort((a, b) => (b.likes - b.dislikes) - (a.likes - a.dislikes));
+    const popularPosts = [...posts].sort((a, b) => a.likes - b.likes);
     // фильтрация  для избранного
     const favoritePosts = posts.filter(post => favorites.includes(post.id));
     const displayedPosts =
