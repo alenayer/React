@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { Post } from "../types/post";
 import { fetchPosts } from "./postsThunk";
-
+import type { RootState } from "./store";
 
 type PostState = {
     selectedPost: Post | null;
@@ -13,12 +13,9 @@ type PostState = {
     posts: Post[],
     //    для избранных
     favorites: number[],  //массив ID выбранных постов
-    // tabs
-    activeTab: 'all' | 'popular' | 'favorites',
     // обработка
     loading: boolean,
     error: string | null,
-
 }
 
 const initialState: PostState = {
@@ -28,11 +25,9 @@ const initialState: PostState = {
     isImagePreviewOpen: false,
     posts: [],
     favorites: [],
-    activeTab: 'all',
     loading: false,
     error: null,
 }
-
 
 // slice для выбранного поста
 const postSlice = createSlice({
@@ -85,10 +80,6 @@ const postSlice = createSlice({
         removeFromFavorites: (state, action:PayloadAction<number>) =>{
             state.favorites = state.favorites.filter(id=>id!==action.payload)
         },
-        // tabs
-        setActiveTab: (state, action: PayloadAction<'all' | 'popular' | 'favorites'>) => {
-            state.activeTab = action.payload;
-        },
        
     },
     extraReducers: (builder) => {
@@ -117,6 +108,17 @@ export const {
     disLikePost,
     addToFavorites,
     removeFromFavorites,
-    setActiveTab } = postSlice.actions;
+    } = postSlice.actions;
 
 export default postSlice.reducer;
+
+
+export const popularPostsSelector = (state:RootState)=>{
+    // сортировка
+ return [...state.post.posts].filter((post)=>post.likes > 3);
+}
+
+export const favoritesPostsSelector = (state:RootState)=>{
+    // Филтруем посты чьи ID есть в избранном
+    return state.post.posts.filter(post=>state.post.favorites.includes(post.id));
+}

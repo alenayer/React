@@ -10,6 +10,9 @@ import NotFound from './components/NotFound/NotFound';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import { AuthProvider } from './contexts/AuthContext';
 import UsersPage from './pages/UsersPage';
+import AllPosts from './components/AllPosts/AllPosts';
+import { FavoritesPosts } from './pages/FavoritesPosts';
+import { PopularPosts } from './pages/PopularPosts';
 
 
 export default function App() {
@@ -28,7 +31,14 @@ export default function App() {
               <PrivateRoute>
                 <PostsPage />
               </PrivateRoute>
-            } />
+            }>
+              <Route index element={<AllPosts />} />  
+              {/* все посты по умолчанию */}
+              <Route path='all' element={<AllPosts />} />
+              <Route path='favorites' element={<FavoritesPosts />} />
+              <Route path='popular' element={<PopularPosts />} />
+
+            </Route>
             <Route path='posts/:id' element={
               <PrivateRoute>
                 <PostPage />
