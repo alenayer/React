@@ -23,7 +23,11 @@ export default function App() {
           <Route path='/' element={<LayoutWithOutlet title='MyApp' />} >
             <Route index element={<HomePage />} />
 
-            <Route path='users' element={<UsersPage />} />
+            <Route path='users' element={
+              <PrivateRoute>
+                <UsersPage />
+              </PrivateRoute>
+            } />
 
             <Route path='signin' element={<SignInPage />} />
             <Route path='registration' element={<RegistrationPage />} />
@@ -32,12 +36,11 @@ export default function App() {
                 <PostsPage />
               </PrivateRoute>
             }>
-              <Route index element={<AllPosts />} />  
+              <Route index element={<AllPosts />} />
               {/* все посты по умолчанию */}
               <Route path='all' element={<AllPosts />} />
               <Route path='favorites' element={<FavoritesPosts />} />
               <Route path='popular' element={<PopularPosts />} />
-
             </Route>
             <Route path='posts/:id' element={
               <PrivateRoute>

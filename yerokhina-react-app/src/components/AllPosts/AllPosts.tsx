@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import PostPreview from '../PostPreview/PostPreview';
 import ImagePreview from '../ImagePreview/ImagePreview';
 import { fetchPosts } from '../../store/postsThunk';
-import { PostCard } from '../PostCard';
+import { PostCard } from '../PostCard/PostCard';
 
 const AllPosts = () => {
     const { theme } = useTheme();

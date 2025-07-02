@@ -6,11 +6,8 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAppSelector } from '../../store/store';
 
-
-
 interface LayoutProps {
     title: string;
-
 }
 
 export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
@@ -20,13 +17,10 @@ export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
     const { isAuth, setAuth } = useAuth();
     const themeApp = useAppSelector(state=>state.theme.mode)
 
-   
-
     const handleHomeClick = () => {
         navigate('/');
         setMenuState('inactive'); //закрываем меню при переходе
     }
-
 
     const handleMenuClick = () => {    //переключатель из одного состояния в другое
         setMenuState(menuState === 'active' ? 'inactive' : 'active')
@@ -40,8 +34,7 @@ export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
     
 
     return (
-      
-        <div className={`layout ${themeApp==='dark'?'dark':''}__theme`}>
+        <div className={`layout ${themeApp}__theme`}>
             <header className='header'>
                 <div className='header-left'>
                     <BurgerButton state={menuState} onClick={handleMenuClick} />
@@ -51,6 +44,8 @@ export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
                     {isAuth ?
                         (<>
                             <NavLink to='/posts' className='header__link'>Posts</NavLink>
+                            <NavLink to='/users' className='header__link'>Users</NavLink>
+
                             <button onClick={() => setAuth(false)} className='logout__btn'>Sign Out</button>
                         </>)
                         :
@@ -68,6 +63,9 @@ export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
                 <nav className='side-menu__nav'>
                     <NavLink to='/' className='side-menu__link' onClick={()=>setMenuState('inactive')}>Home</NavLink>
                     <NavLink to='/posts' className='side-menu__link' onClick={()=>setMenuState('inactive')}>Posts</NavLink>
+
+                    <NavLink to='/users' className='side-menu__link' onClick={()=>setMenuState('inactive')}>Users</NavLink>
+
                     <NavLink to='/registration' className='side-menu__link' onClick={()=>setMenuState('inactive')}>Sign Up</NavLink>
                     <NavLink to='/signin' className='side-menu__link' onClick={()=>setMenuState('inactive')}>Sign In</NavLink>
                 </nav>

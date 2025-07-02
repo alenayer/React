@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
-import type { Post } from "../types/post"
-import { useAppDispatch, useAppSelector } from "../store/store";
-import { addToFavorites, disLikePost, likePost, openImagePreview, openPreview, removeFromFavorites } from "../store/postSlice";
+import type { Post } from "../../types/post"
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { addToFavorites, disLikePost, likePost, openImagePreview, openPreview, removeFromFavorites } from "../../store/postSlice";
 
 interface PostCardProps {
     post: Post
