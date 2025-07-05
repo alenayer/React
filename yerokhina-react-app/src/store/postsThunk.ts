@@ -10,6 +10,7 @@ type ApiResponse = {
     results: Post[],
 }
 
+// Для списка постов с пагинацией и поиском
 export const fetchPosts = createAsyncThunk(
     'post/fetchPosts',
     async ({
@@ -34,3 +35,16 @@ export const fetchPosts = createAsyncThunk(
         };
     }
 );
+
+// Для получения 1 поста  по id
+export const fetchSelectedPost = createAsyncThunk<Post, number>(
+    'post/fetchSelectedPost',
+    async (id) =>{
+        const response = await axios.get<Post>(`https://studapi.teachmeskills.by/blog/posts/${id}`);
+        return {
+            ...response.data,
+            likes:0, //иниц-ция счетчиков
+            dislikes:0,
+        }
+    }
+)

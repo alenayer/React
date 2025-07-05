@@ -6,6 +6,7 @@ import PostPreview from '../PostPreview/PostPreview';
 import ImagePreview from '../ImagePreview/ImagePreview';
 import { fetchPosts } from '../../store/postsThunk';
 import { PostCard } from '../PostCard/PostCard';
+import { errorSelector, isLoadingPosts, postsSelector } from '../../store/postSlice';
 
 const AllPosts = () => {
     const { theme } = useTheme();
@@ -16,11 +17,12 @@ const AllPosts = () => {
     const {
         isPreviewOpen,
         isImagePreviewOpen,
-        posts,
         totalCount,
-        loading,
-        error,
     } = useAppSelector(state => state.post)
+
+    const loading = useAppSelector(isLoadingPosts);
+    const error = useAppSelector(errorSelector);
+    const posts = useAppSelector(postsSelector);
 
 
     useEffect(() => {

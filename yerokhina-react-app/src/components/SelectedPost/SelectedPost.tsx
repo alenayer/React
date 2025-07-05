@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import './SelectedPost.css';
 import { useNavigate, useParams } from 'react-router';
 import { useTheme } from '../../contexts/ThemeContext';
-import type { Post } from '../../types/post';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import { clearSelectedPost, errorSelector, isLoadingSelectedPost, selectedPostSelector } from '../../store/postSlice';
+import { fetchSelectedPost } from '../../store/postsThunk';
 
 
 
@@ -10,41 +12,59 @@ const SelectedPost = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { theme } = useTheme();
-    const [post, setPost] = useState<Post | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
+    const dispatch = useAppDispatch();
+
+    const selectedPost = useAppSelector(selectedPostSelector);
+    const loading = useAppSelector(isLoadingSelectedPost);
+    const error = useAppSelector(errorSelector)
 
     useEffect(() => {
-        const fetchPost = async () => {
-            try {
-                if (!id) {
-                    setError('Post ID is missing');
-                    setLoading(false);
-                    return;
-                }
-                const response = await fetch(`https://studapi.teachmeskills.by/blog/posts/${id}`);
-
-                if (!response.ok) {
-                    setError(`Error: ${response.status} ${response.statusText}`)
-                    setLoading(false);
-                    return;
-                }
-                const data = await response.json()
-                setPost(data);
-
-            } catch (error) {
-                setError('Failed to load post');
-            } finally {
-                setLoading(false)
-            }
+        if (id) {
+            const postId = parseInt(id);
+            dispatch(fetchSelectedPost(postId))
+        }
+        return () => {
+            dispatch(clearSelectedPost())
         };
-        fetchPost();
-
-    }, [id]);
+    }, [id, dispatch]);
 
     const handleBack = () => {
         navigate('/posts');
     };
+
+    if (loading) {
+        return (
+            <div className={`selected__post ${theme}__inner`}>
+                <div className='post__loading'>Loading post...</div>
+            </div>
+        )
+    }
+    if (error) {
+        return (
+            <div className={`selected__post ${theme}__inner`}>
+                <div className='post__error'>{error}</div>
+                <button
+                    onClick={handleBack}
+                    className='back__btn'
+                >
+                    Back to All Posts
+                </button>
+            </div>
+        )
+    }
+    if (!selectedPost) {
+        return (
+            <div className={`selected__post ${theme}__inner`}>
+                <div className='post__not-found'>Post not found</div>
+                <button
+                    onClick={handleBack}
+                    className='back__btn'
+                >
+                    Back to All Posts
+                </button>
+            </div>
+        )
+    }
 
     return (
         <div className={`selected__post ${theme}__inner`}>
@@ -54,30 +74,24 @@ const SelectedPost = () => {
             >
                 Back to All Posts
             </button>
-
-            {loading && <div>Loading post...</div>}
-            {error && <div className='error'>{error}</div>}
-            {!loading && !error && !post && <div>No post found.</div>}
-
-            {post && (
-                <div className='post__card'>
-                    <div className='post__content'>
-                        <p className='post__date'>Date: {post.date}</p>
-                        <h2 className='post__title'>{post.title}</h2>
-                        <p className='post__text'>{post.text}</p>
-                        <p>Lesson: {post.lesson_num}</p>
-                        <p>Author ID: {post.author}</p>
-                    </div>
-                    {post.image && (
-                        <div className='post__image-wrapper'>
-                            <img
-                                className="post__image"
-                                src={post.image}
-                                alt={post.title} />
-                        </div>
-                    )}
+            <div className='post__card'>
+                <div className='post__content'>
+                    <p className='post__date'>Date: {selectedPost.date}</p>
+                    <h2 className='post__title'>{selectedPost.title}</h2>
+                    <p className='post__text'>{selectedPost.text}</p>
+                    <p>Lesson: {selectedPost.lesson_num}</p>
+                    <p>Author ID: {selectedPost.author}</p>
                 </div>
-            )}
+                {selectedPost.image && (
+                    <div className='post__image-wrapper'>
+                        <img
+                            className="post__image"
+                            src={selectedPost.image}
+                            alt={selectedPost.title} />
+                    </div>
+                )}
+            </div>
+
         </div>
     );
 };
