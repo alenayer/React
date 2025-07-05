@@ -11,6 +11,7 @@ type PostState = {
     isImagePreviewOpen: boolean,
     // для лайков
     posts: Post[],
+    totalCount: number,
     //    для избранных
     favorites: number[],  //массив ID выбранных постов
     // обработка
@@ -24,6 +25,7 @@ const initialState: PostState = {
     selectedImage: null,
     isImagePreviewOpen: false,
     posts: [],
+    totalCount:0,
     favorites: [],
     loading: false,
     error: null,
@@ -88,9 +90,10 @@ const postSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(fetchPosts.fulfilled, (state, action: PayloadAction<Post[]>) => {
+            .addCase(fetchPosts.fulfilled, (state, action) => {
                 state.loading = false;
-                state.posts = action.payload.map((el) => ({ ...el, likes: 0, dislikes: 0 }));
+                state.posts = action.payload.posts.map((post:Post) => ({ ...post, likes: 0, dislikes: 0 }));
+                state.totalCount = action.payload.totalCount;
             })
             .addCase(fetchPosts.rejected, (state) => {
                 state.loading = false;
@@ -121,4 +124,8 @@ export const popularPostsSelector = (state:RootState)=>{
 export const favoritesPostsSelector = (state:RootState)=>{
     // Филтруем посты чьи ID есть в избранном
     return state.post.posts.filter(post=>state.post.favorites.includes(post.id));
+}
+
+export const totalCountSelector = (state:RootState) =>{
+    return state.post.totalCount;
 }
