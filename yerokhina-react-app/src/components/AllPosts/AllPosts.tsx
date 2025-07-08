@@ -8,11 +8,13 @@ import { fetchPosts } from '../../store/postsThunk';
 import { PostCard } from '../PostCard/PostCard';
 import { errorSelector, isLoadingPosts, postsSelector } from '../../store/postSlice';
 
+const LIMIT = 20; //постов на странице
+
 const AllPosts = () => {
     const { theme } = useTheme();
     const [search, setSearch] = useState<string>('');
     const [currentPage, setCurrentPage] = useState(1);
-    const limit = 20; //постов на странице
+  
     const dispatch = useAppDispatch();
     const {
         isPreviewOpen,
@@ -26,18 +28,9 @@ const AllPosts = () => {
 
 
     useEffect(() => {
-        dispatch(fetchPosts({ search, page: currentPage, limit }));
+        dispatch(fetchPosts({ search, page: currentPage, limit:LIMIT }));
     }, [search, currentPage, dispatch]);
 
-
-    // // Фильтрация при изменении поиска
-    // const filteredPosts = search ?
-    //     posts.filter(post =>
-    //         post.title.toLowerCase().includes(search.toLowerCase()) ||
-    //         post.text.toLowerCase().includes(search.toLowerCase())
-    //     )
-    //     :
-    //     posts;
     const handlePrevPage = ()=>{
         if(currentPage > 1){
             setCurrentPage(currentPage - 1)
@@ -54,7 +47,7 @@ const AllPosts = () => {
         setCurrentPage(1); //сьрос на 1-ю страницу при новом поиске
     }
 
-    const totalPages = Math.ceil(totalCount / limit);
+    const totalPages = Math.ceil(totalCount / LIMIT);
 
 
     return (
