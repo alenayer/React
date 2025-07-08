@@ -13,6 +13,7 @@ import UsersPage from './pages/UsersPage';
 import AllPosts from './components/AllPosts/AllPosts';
 import { FavoritesPosts } from './pages/FavoritesPosts';
 import { PopularPosts } from './pages/PopularPosts';
+import CreatePostPage from './pages/CreatePostPage';
 
 
 export default function App() {
@@ -46,7 +47,11 @@ export default function App() {
               <PrivateRoute>
                 <PostPage />
               </PrivateRoute>
-
+            } />
+            <Route path='create-post' element={
+              <PrivateRoute>
+                <CreatePostPage />
+              </PrivateRoute>
             } />
             <Route path='*' element={<NotFound />} />
           </Route>

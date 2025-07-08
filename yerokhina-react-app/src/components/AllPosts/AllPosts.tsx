@@ -7,6 +7,7 @@ import ImagePreview from '../ImagePreview/ImagePreview';
 import { fetchPosts } from '../../store/postsThunk';
 import { PostCard } from '../PostCard/PostCard';
 import { errorSelector, isLoadingPosts, postsSelector } from '../../store/postSlice';
+import { NavLink } from 'react-router';
 
 const AllPosts = () => {
     const { theme } = useTheme();
@@ -29,15 +30,6 @@ const AllPosts = () => {
         dispatch(fetchPosts({ search, page: currentPage, limit }));
     }, [search, currentPage, dispatch]);
 
-
-    // // Фильтрация при изменении поиска
-    // const filteredPosts = search ?
-    //     posts.filter(post =>
-    //         post.title.toLowerCase().includes(search.toLowerCase()) ||
-    //         post.text.toLowerCase().includes(search.toLowerCase())
-    //     )
-    //     :
-    //     posts;
     const handlePrevPage = ()=>{
         if(currentPage > 1){
             setCurrentPage(currentPage - 1)
@@ -59,6 +51,7 @@ const AllPosts = () => {
 
     return (
         <div className={`posts__wrapper ${theme}-theme`}>
+            
             {/* основной контент с постами */}
             <div className='posts__search-container'>
                 <input
@@ -70,6 +63,7 @@ const AllPosts = () => {
                 {search && (<div className='search__info'>Найдено:{posts.length} постов</div>)}
             </div>
 
+
             {loading && <p>Loading...</p>}
             {error && <p className='posts__error-message'>{error}</p>}
             {!loading && !error && posts.length === 0 && (
@@ -77,6 +71,8 @@ const AllPosts = () => {
                     {search ? 'Ничего не найдено' : 'Нет доступных постов'}
                 </p>
             )}
+
+<NavLink to = '/create-post' className='create-post__link'>Создать пост</NavLink>
 
             {posts.length > 0 && (
                 <div className='posts'>
