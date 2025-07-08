@@ -32,40 +32,6 @@ const SelectedPost = () => {
         navigate('/posts');
     };
 
-    if (loading) {
-        return (
-            <div className={`selected__post ${theme}__inner`}>
-                <div className='post__loading'>Loading post...</div>
-            </div>
-        )
-    }
-    if (error) {
-        return (
-            <div className={`selected__post ${theme}__inner`}>
-                <div className='post__error'>{error}</div>
-                <button
-                    onClick={handleBack}
-                    className='back__btn'
-                >
-                    Back to All Posts
-                </button>
-            </div>
-        )
-    }
-    if (!selectedPost) {
-        return (
-            <div className={`selected__post ${theme}__inner`}>
-                <div className='post__not-found'>Post not found</div>
-                <button
-                    onClick={handleBack}
-                    className='back__btn'
-                >
-                    Back to All Posts
-                </button>
-            </div>
-        )
-    }
-
     return (
         <div className={`selected__post ${theme}__inner`}>
             <button
@@ -74,6 +40,11 @@ const SelectedPost = () => {
             >
                 Back to All Posts
             </button>
+            {loading&&(<div className='post__loading'>Loading post...</div>)}
+            {error&&(<div className='post__error'>{error}</div>)}
+            {!selectedPost && !loading && !error && (<div className='post__not-found'>Post not found</div>)}
+
+            {selectedPost && (
             <div className='post__card'>
                 <div className='post__content'>
                     <p className='post__date'>Date: {selectedPost.date}</p>
@@ -91,7 +62,7 @@ const SelectedPost = () => {
                     </div>
                 )}
             </div>
-
+        )}
         </div>
     );
 };

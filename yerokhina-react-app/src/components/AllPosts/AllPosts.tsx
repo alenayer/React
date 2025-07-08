@@ -9,11 +9,12 @@ import { PostCard } from '../PostCard/PostCard';
 import { errorSelector, isLoadingPosts, postsSelector } from '../../store/postSlice';
 import { NavLink } from 'react-router';
 
+const LIMIT = 20; //постов на странице
+
 const AllPosts = () => {
     const { theme } = useTheme();
     const [search, setSearch] = useState<string>('');
     const [currentPage, setCurrentPage] = useState(1);
-    const limit = 20; //постов на странице
     const dispatch = useAppDispatch();
     const {
         isPreviewOpen,
@@ -27,7 +28,7 @@ const AllPosts = () => {
 
 
     useEffect(() => {
-        dispatch(fetchPosts({ search, page: currentPage, limit }));
+        dispatch(fetchPosts({ search, page: currentPage, limit:LIMIT }));
     }, [search, currentPage, dispatch]);
 
     const handlePrevPage = ()=>{
@@ -46,7 +47,7 @@ const AllPosts = () => {
         setCurrentPage(1); //сьрос на 1-ю страницу при новом поиске
     }
 
-    const totalPages = Math.ceil(totalCount / limit);
+    const totalPages = Math.ceil(totalCount / LIMIT);
 
 
     return (
