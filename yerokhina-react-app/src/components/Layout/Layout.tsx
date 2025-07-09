@@ -14,13 +14,12 @@ interface LayoutProps {
 export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
     const [menuState, setMenuState] = useState<'active' | 'inactive'>('inactive');  //хранит текущее состояние кнопки
     const { theme } = useTheme(); //получаем из контекста (contextTheme - переимнованное Theme чтоб не конфликтовало с пропсом)
-    // const location = useLocation();
     const navigate = useNavigate();
-
     const { isAuth, setAuth } = useAuth();
 
     const handleHomeClick = () => {
         navigate('/');
+        setMenuState('inactive'); //закрываем меню при переходе
     }
 
 
@@ -33,11 +32,12 @@ export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
             <header className='header'>
                 <div className='header-left'>
                     <BurgerButton state={menuState} onClick={handleMenuClick} />
+                    <div className='app__logo' onClick={handleHomeClick}>MyApp</div>
                 </div>
                 <div className='header-right'>
                     {isAuth ?
                         (<>
-                            <NavLink to='/posts'>Posts</NavLink>
+                            <NavLink to='/posts' className='header__link'>Posts</NavLink>
                             <button onClick={() => setAuth(false)} className='logout__btn'>Sign Out</button>
                         </>)
                         :
@@ -48,6 +48,16 @@ export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
                         )}
                 </div>
             </header>
+            {/* Боковое меню */}
+            <div className={`side-menu ${menuState} ${theme}-theme`}>
+                <nav className='side-menu__nav'>
+                    <NavLink to='/' className='side-menu__link' onClick={()=>setMenuState('inactive')}>Home</NavLink>
+                    <NavLink to='/posts' className='side-menu__link' onClick={()=>setMenuState('inactive')}>Posts</NavLink>
+                    <NavLink to='/registration' className='side-menu__link' onClick={()=>setMenuState('inactive')}>Sign Up</NavLink>
+                    <NavLink to='/signin' className='side-menu__link' onClick={()=>setMenuState('inactive')}>Sign In</NavLink>
+                </nav>
+            </div>
+            {/* Основной контент */}
             <main className='layout__content'>
                 <button className='layout__btn'
                     onClick={handleHomeClick}
