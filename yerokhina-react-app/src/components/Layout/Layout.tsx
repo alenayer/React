@@ -3,8 +3,8 @@ import { useState, type PropsWithChildren } from 'react';
 import BurgerButton from '../BurgerButton/BurgerButton';
 import { NavLink, useNavigate } from 'react-router';
 import { useAuth } from '../../contexts/AuthContext';
-import { useTheme } from '../../contexts/ThemeContext';
-import { useAppSelector } from '../../store/store';
+import { selectTheme, useAppDispatch, useAppSelector } from '../../store/store';
+import { toggleTheme } from '../../store/themeSlice';
 
 interface LayoutProps {
     title: string;
@@ -12,10 +12,10 @@ interface LayoutProps {
 
 export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
     const [menuState, setMenuState] = useState<'active' | 'inactive'>('inactive');  //хранит текущее состояние кнопки
-    const{theme,setTheme} = useTheme();  //получаем из контекста
     const navigate = useNavigate();
     const { isAuth, setAuth } = useAuth();
-    const themeApp = useAppSelector(state=>state.theme.mode)
+    const theme = useAppSelector(selectTheme);
+    const dispatch = useAppDispatch();
 
     const handleHomeClick = () => {
         navigate('/');
@@ -28,13 +28,13 @@ export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
 
      // перекл темы
      const handleThemeToggle =()=>{
-        const newTheme = themeApp === 'light' ? 'dark':'light';
-        setTheme(newTheme) //Обновили через контекст который диспатчит из Redux
+        const newTheme = theme === 'light' ? 'dark':'light';
+        dispatch(toggleTheme(newTheme)) //Обновили через контекст который диспатчит из Redux
     }
     
 
     return (
-        <div className={`layout ${themeApp}__theme`}>
+        <div className={`layout ${theme}__theme`}>
             <header className='header'>
                 <div className='header-left'>
                     <BurgerButton state={menuState} onClick={handleMenuClick} />

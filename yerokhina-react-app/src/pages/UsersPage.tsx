@@ -1,10 +1,9 @@
 
-
-import { useTheme } from "../contexts/ThemeContext";
 import { useGetUsersQuery } from "../query/usersApi"
+import { selectTheme, useAppSelector } from "../store/store";
 
 export default function UsersPage() {
-    const{theme} = useTheme();
+    const theme = useAppSelector(selectTheme)
     // Используем автоматически сгенерированный хук
     const { data: users, isLoading, isError, error } = useGetUsersQuery();
     return (

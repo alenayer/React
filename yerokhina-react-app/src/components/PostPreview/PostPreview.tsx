@@ -1,23 +1,17 @@
-
-
-import { useTheme } from "../../contexts/ThemeContext";
 import { closePreview } from "../../store/postSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-
-
-
 
 const PostPreview = () => {
     const { selectedPost } = useAppSelector(state => state.post);
     const dispatch = useAppDispatch();
-    const { theme } = useTheme();
+    const theme = useAppSelector(state=>state.theme.mode)
 
     if (!selectedPost) return null;
 
 
     return (
         <div className={`post__preview ${theme}`}>
-            <div className={`post__preview-content ${theme}`} onClick={(e) => e.stopPropagation()}>
+            <div className={`post__preview-content ${theme}`}>
                 <button className="post__preview-close" onClick={() => dispatch(closePreview())}>X</button>
                 <div className="post__card">
                     <div className='post__content'>

@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 import './SelectedPost.css';
 import { useNavigate, useParams } from 'react-router';
-import { useTheme } from '../../contexts/ThemeContext';
-import { useAppDispatch, useAppSelector } from '../../store/store';
+import { selectTheme, useAppDispatch, useAppSelector } from '../../store/store';
 import { clearSelectedPost, errorSelector, isLoadingSelectedPost, selectedPostSelector } from '../../store/postSlice';
 import { fetchSelectedPost } from '../../store/postsThunk';
 
@@ -11,7 +10,7 @@ import { fetchSelectedPost } from '../../store/postsThunk';
 const SelectedPost = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { theme } = useTheme();
+    const theme = useAppSelector(selectTheme)
     const dispatch = useAppDispatch();
 
     const selectedPost = useAppSelector(selectedPostSelector);

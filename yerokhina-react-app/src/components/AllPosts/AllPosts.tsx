@@ -1,7 +1,6 @@
 import { useState, useEffect, type ChangeEvent } from 'react';
 import './AllPosts.css';
-import { useTheme } from '../../contexts/ThemeContext';
-import { useAppDispatch, useAppSelector } from '../../store/store';
+import { selectTheme, useAppDispatch, useAppSelector } from '../../store/store';
 import PostPreview from '../PostPreview/PostPreview';
 import ImagePreview from '../ImagePreview/ImagePreview';
 import { fetchPosts } from '../../store/postsThunk';
@@ -12,7 +11,7 @@ import { NavLink } from 'react-router';
 const LIMIT = 20; //постов на странице
 
 const AllPosts = () => {
-    const { theme } = useTheme();
+    const theme = useAppSelector(selectTheme)
     const [search, setSearch] = useState<string>('');
     const [currentPage, setCurrentPage] = useState(1);
     const dispatch = useAppDispatch();
