@@ -14,6 +14,7 @@ import AllPosts from './components/AllPosts/AllPosts';
 import { FavoritesPosts } from './pages/FavoritesPosts';
 import { PopularPosts } from './pages/PopularPosts';
 import CreatePostPage from './pages/CreatePostPage';
+import { ActivationPage } from './pages/ActivationPage';
 
 
 export default function App() {
@@ -32,6 +33,9 @@ export default function App() {
 
             <Route path='signin' element={<SignInPage />} />
             <Route path='registration' element={<RegistrationPage />} />
+
+            <Route path='activate/:uid/:token' element={<ActivationPage />}/>
+
             <Route path='posts' element={
               <PrivateRoute>
                 <PostsPage />

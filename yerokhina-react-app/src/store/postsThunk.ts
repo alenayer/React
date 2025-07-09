@@ -49,7 +49,6 @@ export const fetchSelectedPost = createAsyncThunk<Post, number>(
     }
 )
 
-
 // создание поста
 export const createPost = createAsyncThunk(
     'posts/createPost',
