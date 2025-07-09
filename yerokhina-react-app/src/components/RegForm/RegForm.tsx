@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import './RegForm.css'
+import { useAppDispatch } from '../../store/store';
+import { createUser } from '../../store/usersThunk';
 
 
-interface RegFormProps {
-    onSubmit: () => void;
-}
+export const RegForm = () => {
 
-export const RegForm = ({ onSubmit }: RegFormProps) => {
+    const dispatch = useAppDispatch();
 
     // Refs для управления фокусом в инпутах
     const usernameRef = useRef<HTMLInputElement>(null);
@@ -90,7 +90,7 @@ export const RegForm = ({ onSubmit }: RegFormProps) => {
 
         //    все ок -> 
         if (validated) {
-            onSubmit();
+          dispatch(createUser({username,email, password,course_group:18}))
         }
 
     }

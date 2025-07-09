@@ -45,7 +45,7 @@ const SelectedPost = () => {
             {!selectedPost && !loading && !error && (<div className='post__not-found'>Post not found</div>)}
 
             {selectedPost && (
-                <div className='post__card'>
+            <div className='post__card'>
                 <div className='post__content'>
                     <p className='post__date'>Date: {selectedPost.date}</p>
                     <h2 className='post__title'>{selectedPost.title}</h2>
@@ -62,7 +62,7 @@ const SelectedPost = () => {
                     </div>
                 )}
             </div>
-            )}
+        )}
         </div>
     );
 };

@@ -30,8 +30,8 @@ export const fetchPosts = createAsyncThunk(
         return {
             posts: response.data.results,
             totalCount: response.data.count,
-            nextPage:response.data.next,
-            prevPage:response.data.previous,
+            nextPage: response.data.next,
+            prevPage: response.data.previous,
         };
     }
 );
@@ -39,12 +39,30 @@ export const fetchPosts = createAsyncThunk(
 // Для получения 1 поста  по id
 export const fetchSelectedPost = createAsyncThunk<Post, number>(
     'post/fetchSelectedPost',
-    async (id) =>{
+    async (id) => {
         const response = await axios.get<Post>(`https://studapi.teachmeskills.by/blog/posts/${id}`);
         return {
             ...response.data,
-            likes:0, //иниц-ция счетчиков
-            dislikes:0,
+            likes: 0, //иниц-ция счетчиков
+            dislikes: 0,
         }
+    }
+)
+
+// создание поста
+export const createPost = createAsyncThunk(
+    'posts/createPost',
+    async (formData: FormData) => {
+        const response = await axios.post(
+            'https://studapi.teachmeskills.by/blog/posts/',
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            }
+        );
+        return response.data;
     }
 )

@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { Post } from "../types/post";
-import { fetchPosts, fetchSelectedPost } from "./postsThunk";
+import { createPost, fetchPosts, fetchSelectedPost } from "./postsThunk";
 import type { RootState } from "./store";
 
 type RequestType = 'posts' | 'post' | null;
@@ -127,6 +127,16 @@ const postSlice = createSlice({
                 state.loading = false;
                 state.error = action.error.message || 'Ошибка загрузки поста';
                 state.currentRequest = null;
+            })
+
+
+
+            .addCase(createPost.fulfilled, (state,action)=>{
+                state.posts.unshift({
+                    ...action.payload,
+                    likes:0,
+                    dislikes:0
+                })
             })
     }
 })

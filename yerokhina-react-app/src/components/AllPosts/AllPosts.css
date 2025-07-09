@@ -213,3 +213,27 @@
     font-weight: bold;
     border: 2px solid #4285f4;
 }
+
+
+.create-post__container{
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+    border: 3px solid blue;
+    padding: 20px;
+    border-radius: 4px;
+    background-color: #4285f4;
+}
+.create-post__title{
+    color: blue;
+    font-weight: bold;
+}
+
+.form__file-input{
+    background-color: white;
+    margin-bottom: 20px;
+}
+
+.create-post__link{
+    margin-bottom: 20px;
+}

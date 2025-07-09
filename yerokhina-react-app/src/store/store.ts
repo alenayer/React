@@ -3,6 +3,7 @@ import counterReducer from './counterSlice'
 import { useDispatch, useSelector } from 'react-redux';
 import themeReducer from './themeSlice'
 import postReducer from './postSlice'
+import usersReducer from './usersSlice'
 import { usersApi } from '../query/usersApi';
 
 export const store = configureStore({
@@ -10,6 +11,7 @@ export const store = configureStore({
     counter:counterReducer,
     theme:themeReducer,
     post:postReducer,
+    users:usersReducer,
     [usersApi.reducerPath]:usersApi.reducer,
   },
   middleware:(getDefaultMiddleware)=>   //возвращаем массив middleware
