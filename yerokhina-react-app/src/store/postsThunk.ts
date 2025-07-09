@@ -59,7 +59,7 @@ export const createPost = createAsyncThunk(
             {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    // 'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             }
         );
