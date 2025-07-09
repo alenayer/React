@@ -3,13 +3,18 @@ import counterReducer from './counterSlice'
 import { useDispatch, useSelector } from 'react-redux';
 import themeReducer from './themeSlice'
 import postReducer from './postSlice'
+import { usersApi } from '../query/usersApi';
 
 export const store = configureStore({
   reducer: {
     counter:counterReducer,
     theme:themeReducer,
     post:postReducer,
-  }
+    [usersApi.reducerPath]:usersApi.reducer,
+  },
+  middleware:(getDefaultMiddleware)=>   //возвращаем массив middleware
+    getDefaultMiddleware().concat(usersApi.middleware)
+  
 });
 
 
