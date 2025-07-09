@@ -1,66 +1,58 @@
 import { useState, useEffect, type ChangeEvent } from 'react';
 import './AllPosts.css';
-import { useTheme } from '../../contexts/ThemeContext';
-import { useNavigate } from 'react-router';
+import { selectTheme, useAppDispatch, useAppSelector } from '../../store/store';
+import PostPreview from '../PostPreview/PostPreview';
+import ImagePreview from '../ImagePreview/ImagePreview';
+import { fetchPosts } from '../../store/postsThunk';
+import { PostCard } from '../PostCard/PostCard';
+import { errorSelector, isLoadingPosts, postsSelector } from '../../store/postSlice';
+import { NavLink } from 'react-router';
 
-
-type Post = {
-    id: number,
-    image?: string,
-    text: string,
-    date: string,
-    lesson_num: number,
-    title: string,
-    author: number
-}
+const LIMIT = 20; //постов на странице
 
 const AllPosts = () => {
-    const navigate = useNavigate();
-    const { theme } = useTheme();
-    const [posts, setPosts] = useState<Post[]>([]);  //все посты с сервера
+    const theme = useAppSelector(selectTheme)
     const [search, setSearch] = useState<string>('');
-    const [loading, setLoading] = useState<boolean>(true)
-    const [error, setError] = useState<string>('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const dispatch = useAppDispatch();
+    const {
+        isPreviewOpen,
+        isImagePreviewOpen,
+        totalCount,
+    } = useAppSelector(state => state.post)
+
+    const loading = useAppSelector(isLoadingPosts);
+    const error = useAppSelector(errorSelector);
+    const posts = useAppSelector(postsSelector);
 
 
     useEffect(() => {
+        dispatch(fetchPosts({ search, page: currentPage, limit:LIMIT }));
+    }, [search, currentPage, dispatch]);
 
-        const fetchPosts = async () => {
-            try {
-                setLoading(true);
-                const response = await fetch('https://studapi.teachmeskills.by/blog/posts/');
-                if (!response.ok) {
-                    setError(`Ошибка: ${response.status} ${response.statusText}`);
-                    return; //просто выходим при ошибке
-                }
-                const data = await response.json()
-                setPosts(data.results);
-
-
-            } catch (err) {
-                setError(String(err) || 'Не удалось загрузить посты');
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchPosts();
-
-    }, []);
-    // Фильтрация при изменении поиска
-    const filteredPosts = search ?
-        posts.filter(post =>
-            post.title.toLowerCase().includes(search.toLowerCase()) ||
-            post.text.toLowerCase().includes(search.toLowerCase())
-        )
-        :
-        posts;
+    const handlePrevPage = ()=>{
+        if(currentPage > 1){
+            setCurrentPage(currentPage - 1)
+        }
+    }
+    const handleNextPage = ()=>{
+        if(currentPage < totalPages){
+            setCurrentPage(currentPage + 1)
+        }
+    }
 
     const searchHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        setSearch(event.target.value)
+        setSearch(event.target.value);
+        setCurrentPage(1); //сьрос на 1-ю страницу при новом поиске
     }
+
+    const totalPages = Math.ceil(totalCount / LIMIT);
+
+
     return (
         <div className={`posts__wrapper ${theme}-theme`}>
-
+            
+            {/* основной контент с постами */}
             <div className='posts__search-container'>
                 <input
                     type="search"
@@ -68,47 +60,61 @@ const AllPosts = () => {
                     className='posts__search-input'
                     value={search}
                     onChange={searchHandler} />
-
-                {search && (<div className='search__info'>Найдено:{filteredPosts.length} постов</div>)}
+                {search && (<div className='search__info'>Найдено:{posts.length} постов</div>)}
             </div>
+
 
             {loading && <p>Loading...</p>}
             {error && <p className='posts__error-message'>{error}</p>}
-            {!loading && !error && filteredPosts.length === 0 && (
+            {!loading && !error && posts.length === 0 && (
                 <p className='posts__no-results'>
                     {search ? 'Ничего не найдено' : 'Нет доступных постов'}
                 </p>
             )}
 
-            {!loading && !error && filteredPosts.length > 0 && (
-                <div className='posts'>
-                    {filteredPosts.map(post => (
-                        <div
-                            key={post.id}
-                            className='post__card'
-                            onClick={() => navigate(`/posts/${post.id}`)}
-                        >
-                            <div className='post__content'>
-                                <p className='post__date'>Date: {post.date}</p>
-                                <h2 className='post__title'>{post.title}</h2>
-                                <p className='post__text'>{post.text}</p>
-                                <p>Lesson: {post.lesson_num}</p>
-                                <p>Author ID: {post.author}</p>
-                            </div>
+<NavLink to = '/create-post' className='create-post__link'>Создать пост</NavLink>
 
-                            {post.image && (
-                                <div className='post__image-wrapper'>
-                                    <img
-                                        className="post__image"
-                                        src={post.image}
-                                        alt={post.title} />
-                                </div>
-                            )}
-                        </div>
+            {posts.length > 0 && (
+                <div className='posts'>
+                    {posts.map(post => (
+                        <PostCard post={post} key={post.id} />
                     ))}
                 </div>
             )}
-        </div>
+
+            {/* Пагинация */}
+            {totalPages > 1 && (
+                <div className='pagination'>
+                    <button onClick={handlePrevPage}
+                        disabled={currentPage === 1}
+                    >
+                        Назад</button>
+
+                        <p>Страница {currentPage} из {totalPages}</p>
+                    <button onClick={handleNextPage}
+                        disabled={currentPage >= totalPages}
+                    >
+                        Вперед</button>
+                </div>
+            )}
+
+
+            {/* модалка preview(рендерится только при isPreviewOpen) */}
+            {
+                isPreviewOpen && (
+                    <div className='post__preview-overlay'>
+                        <PostPreview />
+                    </div>
+                )
+            }
+            {
+                isImagePreviewOpen && (
+                    <div className='post__preview-overlay'>
+                        <ImagePreview />
+                    </div>
+                )
+            }
+        </div >
     );
 };
 export default AllPosts;

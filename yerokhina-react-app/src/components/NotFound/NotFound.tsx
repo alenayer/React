@@ -1,9 +1,9 @@
 import { Link } from "react-router";
-import { useTheme } from "../../contexts/ThemeContext"
 import './NotFound.css'
+import { selectTheme, useAppSelector } from "../../store/store";
 
 const NotFound = () =>{
-    const{theme}=useTheme();
+  const theme = useAppSelector(selectTheme)
 
     return(
         <div className={`not-found ${theme}__inner`}>

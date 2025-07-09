@@ -1,18 +1,17 @@
-import { useEffect } from "react";
+
 import SelectedPost from "../components/SelectedPost/SelectedPost";
-import { useTheme } from "../contexts/ThemeContext";
+import { selectTheme, useAppSelector,  } from "../store/store";
+
 
 const PostPage = ()=>{
-    const{setTheme}=useTheme();
-    useEffect(()=>{
-        setTheme('dark');
-        return()=>{
-            setTheme('light')
-        }
-    },[setTheme]
-    )
+    const theme = useAppSelector(selectTheme);
+
+    
     return(
-            <SelectedPost />
+        <div className={`post-page ${theme}-theme`}>
+        <SelectedPost />
+        </div>
+          
     )
 }
    

@@ -9,6 +9,12 @@ import './App.css'
 import NotFound from './components/NotFound/NotFound';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import { AuthProvider } from './contexts/AuthContext';
+import UsersPage from './pages/UsersPage';
+import AllPosts from './components/AllPosts/AllPosts';
+import { FavoritesPosts } from './pages/FavoritesPosts';
+import { PopularPosts } from './pages/PopularPosts';
+import CreatePostPage from './pages/CreatePostPage';
+import { ActivationPage } from './pages/ActivationPage';
 
 
 export default function App() {
@@ -18,18 +24,38 @@ export default function App() {
         <Routes>
           <Route path='/' element={<LayoutWithOutlet title='MyApp' />} >
             <Route index element={<HomePage />} />
+
+            <Route path='users' element={
+              <PrivateRoute>
+                <UsersPage />
+              </PrivateRoute>
+            } />
+
             <Route path='signin' element={<SignInPage />} />
             <Route path='registration' element={<RegistrationPage />} />
+
+            <Route path='activate/:uid/:token' element={<ActivationPage />}/>
+
             <Route path='posts' element={
               <PrivateRoute>
                 <PostsPage />
               </PrivateRoute>
-            } />
+            }>
+              <Route index element={<AllPosts />} />
+              {/* все посты по умолчанию */}
+              <Route path='all' element={<AllPosts />} />
+              <Route path='favorites' element={<FavoritesPosts />} />
+              <Route path='popular' element={<PopularPosts />} />
+            </Route>
             <Route path='posts/:id' element={
               <PrivateRoute>
                 <PostPage />
               </PrivateRoute>
-
+            } />
+            <Route path='create-post' element={
+              <PrivateRoute>
+                <CreatePostPage />
+              </PrivateRoute>
             } />
             <Route path='*' element={<NotFound />} />
           </Route>

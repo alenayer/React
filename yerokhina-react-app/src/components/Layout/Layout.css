@@ -7,6 +7,8 @@
     display: flex;
     flex-direction: column;
     position: relative;
+    width: 100%;
+  
 }
 .layout::after {
    content: '';
@@ -61,9 +63,9 @@
 
 .layout__content {
     margin: 80px auto 0; 
-    max-width: 800px;
     width: 100%;
     padding: 20px;
+
 }
 
 .layout__btn {
@@ -81,7 +83,7 @@
 
 .light__theme,
 .light__inner {
-    background-color: white;
+    background-color: #eee;
     color: #333;
 }
 
@@ -105,7 +107,7 @@
     left: -300px;
     /* скрыто за левым краем */
     height: 100%;
-    width: 250px;
+    width: 180px;
     padding-top: 80px;
     /* тступ под header */
     background-color: blue;
@@ -140,4 +142,20 @@
     margin: auto;
     border-top: 1px solid gray;
     color: gray;
+}
+
+.users__page{
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.users__list{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 10px;
+    padding: 0;
+    list-style: none;
+}
+.user__card{
+    border: 1px solid blue;
 }
