@@ -6,13 +6,16 @@ import postReducer from './postSlice'
 import usersReducer from './usersSlice'
 import { usersApi } from '../query/usersApi';
 
+
 export const store = configureStore({
   reducer: {
     counter:counterReducer,
     theme:themeReducer,
     post:postReducer,
     users:usersReducer,
+   
     [usersApi.reducerPath]:usersApi.reducer,
+    
   },
   middleware:(getDefaultMiddleware)=>   //возвращаем массив middleware
     getDefaultMiddleware().concat(usersApi.middleware)

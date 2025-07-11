@@ -9,7 +9,7 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
-    const [isAuth, setAuth] = useState(false)
+    const [isAuth, setAuth] = useState(!!sessionStorage.getItem('access'));
 
 
     return (

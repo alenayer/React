@@ -17,6 +17,7 @@ export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
     const theme = useAppSelector(selectTheme);
     const dispatch = useAppDispatch();
 
+
     const handleHomeClick = () => {
         navigate('/');
         setMenuState('inactive'); //закрываем меню при переходе
@@ -30,6 +31,13 @@ export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
      const handleThemeToggle =()=>{
         const newTheme = theme === 'light' ? 'dark':'light';
         dispatch(toggleTheme(newTheme)) //Обновили через контекст который диспатчит из Redux
+    }
+     
+     const handleSignOut =()=>{
+       setAuth(false);
+       sessionStorage.removeItem('access')
+       sessionStorage.removeItem('refresh')
+      
     }
     
 
@@ -46,7 +54,7 @@ export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
                             <NavLink to='/posts' className='header__link'>Posts</NavLink>
                             <NavLink to='/users' className='header__link'>Users</NavLink>
 
-                            <button onClick={() => setAuth(false)} className='logout__btn'>Sign Out</button>
+                            <button onClick={handleSignOut} className='logout__btn'>Sign Out</button>
                         </>)
                         :
                         (<>

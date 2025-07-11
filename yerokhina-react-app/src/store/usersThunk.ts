@@ -12,6 +12,7 @@ interface ActivateUserData {
         "token": string,
 }
 
+
 export const createUser = createAsyncThunk(
     'users/createUser',
     async (data:CreateUserData) => {
