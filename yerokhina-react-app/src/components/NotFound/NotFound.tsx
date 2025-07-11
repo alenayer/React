@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import './NotFound.css'
-import { selectTheme, useAppSelector } from "../../store/store";
+import {useAppSelector } from "../../store/store";
+import { selectTheme } from "../../store/themeSlice";
 
 const NotFound = () =>{
   const theme = useAppSelector(selectTheme)

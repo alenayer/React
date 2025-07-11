@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import themeReducer from './themeSlice'
 import postReducer from './postSlice'
 import usersReducer from './usersSlice'
+import profileReducer from './profileSlice'
 import { usersApi } from '../query/usersApi';
 
 
@@ -13,6 +14,7 @@ export const store = configureStore({
     theme:themeReducer,
     post:postReducer,
     users:usersReducer,
+    profile:profileReducer,
    
     [usersApi.reducerPath]:usersApi.reducer,
     
@@ -32,5 +34,3 @@ export type AppStore = typeof store;
 export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
 export const useAppSelector = useSelector.withTypes<RootState>()
 
-
-export const selectTheme = (state:RootState) => state.theme.mode;

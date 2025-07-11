@@ -36,22 +36,15 @@ export default function App() {
 
             <Route path='activate/:uid/:token' element={<ActivationPage />}/>
 
-            <Route path='posts' element={
-              <PrivateRoute>
-                <PostsPage />
-              </PrivateRoute>
-            }>
+            <Route path='posts' element={<PostsPage />}>
+
               <Route index element={<AllPosts />} />
               {/* все посты по умолчанию */}
               <Route path='all' element={<AllPosts />} />
               <Route path='favorites' element={<FavoritesPosts />} />
               <Route path='popular' element={<PopularPosts />} />
             </Route>
-            <Route path='posts/:id' element={
-              <PrivateRoute>
-                <PostPage />
-              </PrivateRoute>
-            } />
+            <Route path='posts/:id' element={<PostPage />} />
             <Route path='create-post' element={
               <PrivateRoute>
                 <CreatePostPage />
