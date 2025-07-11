@@ -53,6 +53,9 @@ const usersSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload as string || "Activation failed";
             })
+
+
+        
     }
 })
 export const {clearError} = usersSlice.actions;

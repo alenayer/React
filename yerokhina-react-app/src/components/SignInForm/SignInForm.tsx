@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import './SignInForm.css'
 
 interface SignInFormProps {
-    onSubmit: () => void;
+    onSubmit: (email:string, password:string) => void;
 }
 
 export const SignInForm = ({ onSubmit }: SignInFormProps) => {
@@ -53,7 +53,7 @@ export const SignInForm = ({ onSubmit }: SignInFormProps) => {
         }
         //    все ок -> чистим ошибки
         if (validated) {
-            onSubmit();
+            onSubmit(email,password);
         }
     };
 
