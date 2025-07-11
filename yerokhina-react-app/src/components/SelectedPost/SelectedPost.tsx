@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 import './SelectedPost.css';
 import { useNavigate, useParams } from 'react-router';
-import { selectTheme, useAppDispatch, useAppSelector } from '../../store/store';
+import {useAppDispatch, useAppSelector } from '../../store/store';
 import { clearSelectedPost, errorSelector, isLoadingSelectedPost, selectedPostSelector } from '../../store/postSlice';
 import { fetchSelectedPost } from '../../store/postsThunk';
+import { selectTheme } from '../../store/themeSlice';
 
 
 

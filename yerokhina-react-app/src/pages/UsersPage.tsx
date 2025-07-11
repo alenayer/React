@@ -1,6 +1,7 @@
 
 import { useGetUsersQuery } from "../query/usersApi"
-import { selectTheme, useAppSelector } from "../store/store";
+import {useAppSelector } from "../store/store";
+import { selectTheme } from "../store/themeSlice";
 
 export default function UsersPage() {
     const theme = useAppSelector(selectTheme)

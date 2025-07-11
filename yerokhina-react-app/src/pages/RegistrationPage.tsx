@@ -2,8 +2,9 @@
 import { SuccessModeReg } from "../components/SuccessModeReg/SuccessModeReg";
 import { useNavigate } from "react-router";
 import { RegForm } from "../components/RegForm/RegForm";
-import { selectTheme, useAppSelector } from "../store/store";
+import {useAppSelector } from "../store/store";
 import { isUserCreated } from "../store/usersSlice";
+import { selectTheme } from "../store/themeSlice";
 
 
 const RegistrationPage = ()=>{

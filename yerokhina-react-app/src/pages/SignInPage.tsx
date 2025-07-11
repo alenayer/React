@@ -3,9 +3,11 @@ import { SuccessMode } from "../components/SuccessMode/SuccessMode";
 import { SignInForm } from "../components/SignInForm/SignInForm";
 import { useNavigate } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
-import { selectTheme, useAppDispatch, useAppSelector } from "../store/store";
+import { useAppDispatch, useAppSelector } from "../store/store";
 
 import { createJwt } from "../store/authThunk";
+import { fetchProfile } from "../store/profileThunk";
+import { selectTheme } from "../store/themeSlice";
 
 
 const SignInPage = ()=>{
@@ -19,6 +21,7 @@ const SignInPage = ()=>{
     const handleViewPosts = ()=>{
         setAuth(true);
         navigate('/posts')
+        dispatch(fetchProfile())
      };
     const handleSubmit = (email:string, password:string)=>{
        dispatch(createJwt({

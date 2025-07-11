@@ -1,10 +1,12 @@
 import './Layout.css'
-import { useState, type PropsWithChildren } from 'react';
+import { useEffect, useState, type PropsWithChildren } from 'react';
 import BurgerButton from '../BurgerButton/BurgerButton';
 import { NavLink, useNavigate } from 'react-router';
 import { useAuth } from '../../contexts/AuthContext';
-import { selectTheme, useAppDispatch, useAppSelector } from '../../store/store';
-import { toggleTheme } from '../../store/themeSlice';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import { selectTheme} from '../../store/themeSlice';
+import { fetchProfile } from '../../store/profileThunk';
+import UserDropDown from '../UserDropDown/UserDropDown';
 
 interface LayoutProps {
     title: string;
@@ -13,9 +15,17 @@ interface LayoutProps {
 export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
     const [menuState, setMenuState] = useState<'active' | 'inactive'>('inactive');  //хранит текущее состояние кнопки
     const navigate = useNavigate();
-    const { isAuth, setAuth } = useAuth();
+    const { isAuth} = useAuth();
     const theme = useAppSelector(selectTheme);
+   
     const dispatch = useAppDispatch();
+
+
+    useEffect(()=>{
+        if(isAuth){
+            dispatch(fetchProfile())
+        }
+    },[isAuth, dispatch])
 
 
     const handleHomeClick = () => {
@@ -27,18 +37,6 @@ export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
         setMenuState(menuState === 'active' ? 'inactive' : 'active')
     }
 
-     // перекл темы
-     const handleThemeToggle =()=>{
-        const newTheme = theme === 'light' ? 'dark':'light';
-        dispatch(toggleTheme(newTheme)) //Обновили через контекст который диспатчит из Redux
-    }
-     
-     const handleSignOut =()=>{
-       setAuth(false);
-       sessionStorage.removeItem('access')
-       sessionStorage.removeItem('refresh')
-      
-    }
     
 
     return (
@@ -46,15 +44,16 @@ export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
             <header className='header'>
                 <div className='header-left'>
                     <BurgerButton state={menuState} onClick={handleMenuClick} />
-                    <div className='app__logo' onClick={handleHomeClick}>MyApp</div>
+                    <div className='app__logo' onClick={handleHomeClick}>Home</div>
+                    <NavLink to='/posts' className='header__link'>Posts</NavLink>
                 </div>
                 <div className='header-right'>
                     {isAuth ?
                         (<>
-                            <NavLink to='/posts' className='header__link'>Posts</NavLink>
                             <NavLink to='/users' className='header__link'>Users</NavLink>
 
-                            <button onClick={handleSignOut} className='logout__btn'>Sign Out</button>
+                            {/* Отображаем пользователя */}
+                            <UserDropDown/>
                         </>)
                         :
                         (<>
@@ -63,7 +62,6 @@ export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
                         </>
                         )}
 
-                        <button onClick={handleThemeToggle}>Поменять тему</button>
                 </div>
             </header>
             {/* Боковое меню */}
