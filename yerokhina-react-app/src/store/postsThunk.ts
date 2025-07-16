@@ -59,10 +59,29 @@ export const createPost = createAsyncThunk(
             {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${sessionStorage.getItem('access')}`
                 }
             }
         );
         return response.data;
     }
+)
+
+// Получение моих постов
+export const fetchMyPosts = createAsyncThunk(
+    'post/fetchMyPosts',
+    async({
+        page=1,
+        limit = 20
+    } : {page?:number, limit?:number}
+) =>{
+    const offset = (page-1)*limit;
+    const url = `https://studapi.teachmeskills.by/blog/posts/my_posts/?limit=${limit}&offset=${offset}`;
+    const response = await axios.get<ApiResponse>(url);
+
+    return{
+        posts:response.data.results,
+        totalCount: response.data.count,
+    }
+}
 )

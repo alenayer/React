@@ -46,6 +46,9 @@ export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
                     <BurgerButton state={menuState} onClick={handleMenuClick} />
                     <div className='app__logo' onClick={handleHomeClick}>Home</div>
                     <NavLink to='/posts' className='header__link'>Posts</NavLink>
+
+                    {/* jsonplaceholder (create-posts-other) */}
+                    <NavLink to='/create-post-other'>Создать пост на jsonplaceholder</NavLink>
                 </div>
                 <div className='header-right'>
                     {isAuth ?

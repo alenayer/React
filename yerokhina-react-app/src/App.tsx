@@ -9,12 +9,13 @@ import './App.css'
 import NotFound from './components/NotFound/NotFound';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import { AuthProvider } from './contexts/AuthContext';
-import UsersPage from './pages/UsersPage';
+import UsersPage from './pages/JsonPlaceholder/UsersPage';
 import AllPosts from './components/AllPosts/AllPosts';
 import { FavoritesPosts } from './pages/FavoritesPosts';
 import { PopularPosts } from './pages/PopularPosts';
 import CreatePostPage from './pages/CreatePostPage';
 import { ActivationPage } from './pages/ActivationPage';
+import { CreatePostOther } from './pages/JsonPlaceholder/CreatePostOther';
 
 
 export default function App() {
@@ -24,6 +25,9 @@ export default function App() {
         <Routes>
           <Route path='/' element={<LayoutWithOutlet title='MyApp' />} >
             <Route index element={<HomePage />} />
+
+            {/* с jsonplaceholder */}
+            <Route path='/create-post-other' element={<CreatePostOther/>}/>
 
             <Route path='users' element={
               <PrivateRoute>

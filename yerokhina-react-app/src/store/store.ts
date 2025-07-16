@@ -5,7 +5,7 @@ import themeReducer from './themeSlice'
 import postReducer from './postSlice'
 import usersReducer from './usersSlice'
 import profileReducer from './profileSlice'
-import { usersApi } from '../query/usersApi';
+import { usersApi } from '../pages/JsonPlaceholder/query/usersApi';
 
 
 export const store = configureStore({

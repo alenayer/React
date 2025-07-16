@@ -1,9 +1,9 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { Post } from "../types/post";
-import { createPost, fetchPosts, fetchSelectedPost } from "./postsThunk";
+import { createPost, fetchMyPosts, fetchPosts, fetchSelectedPost } from "./postsThunk";
 import type { RootState } from "./store";
 
-type RequestType = 'posts' | 'post' | null;
+type RequestType = 'posts' | 'post' | 'my-posts' | null;
 
 type PostState = {
     selectedPost: Post | null;
@@ -20,6 +20,9 @@ type PostState = {
     loading: boolean,
     error: string | null,
     currentRequest:RequestType,  //тип текущего запроса
+
+    myPosts:Post[],
+    myPostsCount:number,
 }
 
 const initialState: PostState = {
@@ -32,7 +35,10 @@ const initialState: PostState = {
     favorites: [],
     loading: false,
     error: null,
-    currentRequest: null
+    currentRequest: null,
+
+    myPosts:[],
+    myPostsCount:0,
 
 }
 
@@ -130,7 +136,6 @@ const postSlice = createSlice({
             })
 
 
-
             .addCase(createPost.fulfilled, (state,action)=>{
                 state.posts.unshift({
                     ...action.payload,
@@ -138,6 +143,24 @@ const postSlice = createSlice({
                     dislikes:0
                 })
             })
+
+             // Обработка fetchMyPost
+             .addCase(fetchMyPosts.pending,(state)=>{
+                state.loading = true;
+                state.error = null;
+                state.currentRequest = 'my-posts'; //тип запроса
+             })
+             .addCase(fetchMyPosts.fulfilled,(state,action)=>{
+                state.loading = false;
+                state.myPosts=action.payload.posts;
+                state.myPostsCount = action.payload.totalCount;
+                state.currentRequest = null; 
+             })
+             .addCase(fetchMyPosts.rejected,(state,action)=>{
+                state.loading = false;
+                state.error = action.error.message || 'Ошибка загрузки моих постов';;
+                state.currentRequest = null; 
+             })
     }
 })
 
@@ -161,6 +184,10 @@ export const selectedPostSelector = (state: RootState) => state.post.selectedPos
 export const loadingSelector = (state: RootState) => state.post.loading;
 export const errorSelector = (state: RootState) => state.post.error;
 export const totalCountSelector = (state: RootState) => state.post.totalCount;
+// мои посты
+export const myPostsSelector =(state:RootState)=>state.post.myPosts;
+export const myPostsCountSelector = (state: RootState) => state.post.myPostsCount;
+export const isloadingMyPosts = (state:RootState) => state.post.loading && state.post.currentRequest === 'my-posts'
 
 // Умные селекторы загрузки
 export const isLoadingPosts = (state:RootState)=>state.post.loading && state.post.currentRequest === 'posts';
