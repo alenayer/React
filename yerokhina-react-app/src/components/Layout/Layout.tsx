@@ -49,6 +49,7 @@ export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
 
                     {/* jsonplaceholder (create-posts-other) */}
                     <NavLink to='/create-post-other'>Создать пост на jsonplaceholder</NavLink>
+                    <NavLink to='/create-user'>Создать пользователя на jsonplaceholder</NavLink>
                 </div>
                 <div className='header-right'>
                     {isAuth ?
