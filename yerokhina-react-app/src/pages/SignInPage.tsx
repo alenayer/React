@@ -2,26 +2,24 @@ import { useState } from "react";
 import { SuccessMode } from "../components/SuccessMode/SuccessMode";
 import { SignInForm } from "../components/SignInForm/SignInForm";
 import { useNavigate } from "react-router";
-import { useAuth } from "../contexts/AuthContext";
 import { useAppDispatch, useAppSelector } from "../store/store";
-
 import { createJwt } from "../store/authThunk";
-import { fetchProfile } from "../store/profileThunk";
 import { selectTheme } from "../store/themeSlice";
+import { setIsAuth } from "../store/profileSlice";
 
 
 const SignInPage = ()=>{
     const navigate = useNavigate();
     const theme = useAppSelector(selectTheme)
     const[isSuccess, setIsSuccess] = useState(false);
-    const{setAuth} = useAuth();
+    
 
     const dispatch = useAppDispatch();
 
     const handleViewPosts = ()=>{
-        setAuth(true);
+       dispatch(setIsAuth(true))
         navigate('/posts')
-        dispatch(fetchProfile())
+        // dispatch(fetchProfile())
      };
     const handleSubmit = (email:string, password:string)=>{
        dispatch(createJwt({

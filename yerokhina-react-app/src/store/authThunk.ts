@@ -1,6 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { AxiosResponse } from "axios";
-import axios from "axios";
+import instance from "../api/api";
+import { store } from "./store";
+import { setIsAuth } from "./profileSlice";
 
 interface CreateJwtData {
     "email": string,
@@ -16,10 +18,9 @@ export const createJwt = createAsyncThunk(
     async ({ data, navigate }: { data: CreateJwtData, navigate: () => void }) => {
 
         try {
-            const response = await axios.post<any, AxiosResponse<JwtResponse>>(
-                'https://studapi.teachmeskills.by/auth/jwt/create/',
+            const response = await instance.post<any, AxiosResponse<JwtResponse>>(
+                '/auth/jwt/create/',
                 { ...data }
-
             );
             sessionStorage.setItem('access', response.data.access);
             sessionStorage.setItem('refresh', response.data.refresh);
@@ -34,17 +35,17 @@ export const createJwt = createAsyncThunk(
 export const refreshJwt = createAsyncThunk(
     'users/refreshJwt',
     async () => {
-
         try {
             const refresh = sessionStorage.getItem('refresh')
-            const response = await axios.post<any, AxiosResponse<{ access: string }>>(
-                'https://studapi.teachmeskills.by/auth/jwt/refresh/',
+            const response = await instance.post<any, AxiosResponse<{ access: string }>>(
+                '/auth/jwt/refresh/',
                 { refresh }  //refresh:refresh
 
             );
             sessionStorage.setItem('access', response.data.access);
 
             location.reload();
+            store.dispatch(setIsAuth(true))
             return response.data;
         } catch (error) {
             console.log(error);
