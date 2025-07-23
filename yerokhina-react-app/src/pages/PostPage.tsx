@@ -1,6 +1,7 @@
 
 import SelectedPost from "../components/SelectedPost/SelectedPost";
-import { selectTheme, useAppSelector,  } from "../store/store";
+import {useAppSelector,  } from "../store/store";
+import { selectTheme } from "../store/themeSlice";
 
 
 const PostPage = ()=>{

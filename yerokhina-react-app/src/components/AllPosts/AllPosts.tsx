@@ -1,12 +1,13 @@
 import { useState, useEffect, type ChangeEvent } from 'react';
 import './AllPosts.css';
-import { selectTheme, useAppDispatch, useAppSelector } from '../../store/store';
+import {useAppDispatch, useAppSelector } from '../../store/store';
 import PostPreview from '../PostPreview/PostPreview';
 import ImagePreview from '../ImagePreview/ImagePreview';
 import { fetchPosts } from '../../store/postsThunk';
 import { PostCard } from '../PostCard/PostCard';
 import { errorSelector, isLoadingPosts, postsSelector } from '../../store/postSlice';
 import { NavLink } from 'react-router';
+import { selectTheme } from '../../store/themeSlice';
 
 const LIMIT = 20; //постов на странице
 

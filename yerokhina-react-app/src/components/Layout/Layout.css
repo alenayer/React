@@ -8,6 +8,8 @@
     flex-direction: column;
     position: relative;
     width: 100%;
+    margin: 0;
+    padding: 0;
   
 }
 .layout::after {
@@ -20,7 +22,6 @@
    background-color: rgba(0,0,0,0.5);
    opacity: 0;
    visibility: hidden;
-   
 }
 
 .header {
@@ -57,8 +58,10 @@
 }
 
 .header__link:hover {
-    background-color: white;
-    color: blue;
+    border-bottom: 1px dotted white;
+}
+.header__profile {
+    color: white;
 }
 
 .layout__content {
@@ -131,6 +134,9 @@
     text-decoration: none;
     color: white;
     font-weight: bold;
+}
+.side-menu__link:hover{
+  border-bottom: 1px dotted white;
 
 }
 

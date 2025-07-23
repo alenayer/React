@@ -1,9 +1,11 @@
 import type { ReactElement } from "react";
-import { useAuth } from "../../contexts/AuthContext";
+
 import { Navigate } from "react-router";
+import { useAppSelector } from "../../store/store";
+import { selectIsAuth } from "../../store/profileSlice";
 
 const PrivateRoute = ({ children }: {children:ReactElement}) => {
-    const { isAuth } = useAuth();
+    const isAuth  = useAppSelector(selectIsAuth);
     return isAuth ? children : <Navigate to='/signin' replace />
   };
 
