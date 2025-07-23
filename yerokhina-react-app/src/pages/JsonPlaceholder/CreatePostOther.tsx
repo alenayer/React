@@ -27,7 +27,8 @@ export const CreatePostOther = ({ post }: CreatePostOtherProps) => {
     const { 
         register,
         handleSubmit,
-        formState: { errors }, reset } = useForm<CreatePostOther>({
+        formState: { errors },
+        reset } = useForm<CreatePostOther>({
         resolver: zodResolver(PostSchema.omit({ 'id': true })),  //когда зарегистрированы и проверка на валтдность - используй схему и правилами в схеме с помощью zod (соединяющая ниточка)
         defaultValues: {
             title: '',

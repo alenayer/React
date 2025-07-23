@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import instance from "../api/api";
 
 interface CreateUserData {
         "username": string,
@@ -17,8 +17,8 @@ export const createUser = createAsyncThunk(
     'users/createUser',
     async (data:CreateUserData) => {
         try{
-        const response = await axios.post(
-            'https://studapi.teachmeskills.by/auth/users/',
+        const response = await instance.post(
+            '/auth/users/',
            {...data}
            
         );
@@ -34,8 +34,8 @@ export const activateUser = createAsyncThunk(
     async (data:ActivateUserData) => {
      
         try{
-        const response = await axios.post(
-            'https://studapi.teachmeskills.by/auth/users/activation/',
+        const response = await instance.post(
+            '/auth/users/activation/',
            {...data}
            
         );

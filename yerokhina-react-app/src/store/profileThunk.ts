@@ -1,17 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+
+import instance from "../api/api";
 
 export const fetchProfile = createAsyncThunk(
     'profile/fetchProfile',
     async () =>{
         try{
-            const response = await axios.get( 'https://studapi.teachmeskills.by/auth/users/me/',
-            {
-                headers: {
-                    'Authorization': `Bearer ${sessionStorage.getItem('access')}`
-                }
-            }
-            );
+            const response = await instance.get( '/auth/users/me/');
             return response.data
         }catch(error){
             console.log(error);

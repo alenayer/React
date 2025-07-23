@@ -8,7 +8,7 @@ import PostPage from './pages/PostPage';
 import './App.css'
 import NotFound from './components/NotFound/NotFound';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
-import { AuthProvider } from './contexts/AuthContext';
+
 import UsersPage from './pages/JsonPlaceholder/UsersPage';
 import AllPosts from './components/AllPosts/AllPosts';
 import { FavoritesPosts } from './pages/FavoritesPosts';
@@ -16,11 +16,13 @@ import { PopularPosts } from './pages/PopularPosts';
 import CreatePostPage from './pages/CreatePostPage';
 import { ActivationPage } from './pages/ActivationPage';
 import { CreatePostOther } from './pages/JsonPlaceholder/CreatePostOther';
+import { CreateUserForm } from './pages/JsonPlaceholder/CreateUserForm';
 
 
 export default function App() {
+
   return (
-    <AuthProvider>
+    
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<LayoutWithOutlet title='MyApp' />} >
@@ -28,6 +30,7 @@ export default function App() {
 
             {/* с jsonplaceholder */}
             <Route path='/create-post-other' element={<CreatePostOther/>}/>
+            <Route path='/create-user' element={<CreateUserForm/>}/>
 
             <Route path='users' element={
               <PrivateRoute>
@@ -58,7 +61,7 @@ export default function App() {
           </Route>
         </Routes>
       </BrowserRouter >
-    </AuthProvider>
+  
   );
 }
 
