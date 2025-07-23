@@ -2,11 +2,12 @@ import './Layout.css'
 import { useEffect, useState, type PropsWithChildren } from 'react';
 import BurgerButton from '../BurgerButton/BurgerButton';
 import { NavLink, useNavigate } from 'react-router';
-import { useAuth } from '../../contexts/AuthContext';
+
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { selectTheme} from '../../store/themeSlice';
 import { fetchProfile } from '../../store/profileThunk';
 import UserDropDown from '../UserDropDown/UserDropDown';
+import { selectIsAuth } from '../../store/profileSlice';
 
 interface LayoutProps {
     title: string;
@@ -15,17 +16,17 @@ interface LayoutProps {
 export const Layout = ({ title, children }: PropsWithChildren<LayoutProps>) => {
     const [menuState, setMenuState] = useState<'active' | 'inactive'>('inactive');  //хранит текущее состояние кнопки
     const navigate = useNavigate();
-    const { isAuth} = useAuth();
+    const isAuth = useAppSelector(selectIsAuth);
     const theme = useAppSelector(selectTheme);
    
     const dispatch = useAppDispatch();
 
 
     useEffect(()=>{
-        if(isAuth){
-            dispatch(fetchProfile())
-        }
-    },[isAuth, dispatch])
+       if(isAuth){
+        dispatch(fetchProfile())
+       }
+    },[isAuth])
 
 
     const handleHomeClick = () => {

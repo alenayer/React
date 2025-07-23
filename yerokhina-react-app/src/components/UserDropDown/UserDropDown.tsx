@@ -1,24 +1,21 @@
 import './UserDropDown.css'
 import { useState } from "react"
 import { useAppDispatch, useAppSelector } from "../../store/store";
-import { useAuth } from "../../contexts/AuthContext";
-import { clearProfile, selectEmail, selectUsername } from "../../store/profileSlice";
+
+import { clearProfile, selectEmail, selectUsername, setIsAuth } from "../../store/profileSlice";
 import { selectTheme, toggleTheme } from '../../store/themeSlice';
 
 const UserDropDown = () =>{
     const [isOpen, setIsOpen]=useState(false);
     const dispatch = useAppDispatch();
-    const {setAuth} = useAuth();
-
-
+  
     // получаем данные профиля из Redux и тему
     const username = useAppSelector(selectUsername) || '';
     const email = useAppSelector(selectEmail) || ''; 
     const theme = useAppSelector(selectTheme);
 
-
     const handleSignOut =()=>{
-        setAuth(false);
+       dispatch(setIsAuth(false));
         sessionStorage.removeItem('access');
         sessionStorage.removeItem('refresh');
         dispatch(clearProfile());
@@ -35,7 +32,6 @@ const UserDropDown = () =>{
         setIsOpen(false); //закрыли меню после переключения 
     }
      
-
     return(
         <div className="user__dropdown">
             <button className="user__dropdown-avatar" onClick={()=>setIsOpen(!isOpen)}>{firstLetter}</button>

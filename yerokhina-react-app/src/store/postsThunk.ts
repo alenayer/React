@@ -1,7 +1,7 @@
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
 import type { Post } from '../types/post';
+import instance from '../api/api';
 
 type ApiResponse = {
     count: number,
@@ -23,10 +23,9 @@ export const fetchPosts = createAsyncThunk(
         search?: string
     }) => {
         const offset = (page - 1) * limit;
-        const url = `https://studapi.teachmeskills.by/blog/posts/?limit=${limit}&offset=${offset}${search ? `&search=${search}` : ''
-            }`;
 
-        const response = await axios.get<ApiResponse>(url);
+        const response = await instance.get<ApiResponse>(`/blog/posts/?limit=${limit}&offset=${offset}${search ? `&search=${search}` : ''
+    }`);
         return {
             posts: response.data.results,
             totalCount: response.data.count,
@@ -40,7 +39,7 @@ export const fetchPosts = createAsyncThunk(
 export const fetchSelectedPost = createAsyncThunk<Post, number>(
     'post/fetchSelectedPost',
     async (id) => {
-        const response = await axios.get<Post>(`https://studapi.teachmeskills.by/blog/posts/${id}`);
+        const response = await instance.get<Post>(`/blog/posts/${id}`);
         return {
             ...response.data,
             likes: 0, //иниц-ция счетчиков
@@ -53,13 +52,12 @@ export const fetchSelectedPost = createAsyncThunk<Post, number>(
 export const createPost = createAsyncThunk(
     'posts/createPost',
     async (formData: FormData) => {
-        const response = await axios.post(
-            'https://studapi.teachmeskills.by/blog/posts/',
+        const response = await instance.post(
+            '/blog/posts/',
             formData,
             {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    'Authorization': `Bearer ${sessionStorage.getItem('access')}`
                 }
             }
         );
@@ -76,8 +74,7 @@ export const fetchMyPosts = createAsyncThunk(
     } : {page?:number, limit?:number}
 ) =>{
     const offset = (page-1)*limit;
-    const url = `https://studapi.teachmeskills.by/blog/posts/my_posts/?limit=${limit}&offset=${offset}`;
-    const response = await axios.get<ApiResponse>(url);
+    const response = await instance.get<ApiResponse>(`/blog/posts/my_posts/?limit=${limit}&offset=${offset}`);
 
     return{
         posts:response.data.results,
