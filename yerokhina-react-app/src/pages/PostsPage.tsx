@@ -24,6 +24,13 @@ const PostsPage = () => {
                         Popular posts
                     </button>
                 </NavLink>
+                <NavLink to={'my-posts'}>
+                    <button className={isActiveTab('my-posts')}
+
+                    >
+                       My posts
+                    </button>
+                </NavLink>
             </div>
             
             <Outlet/>

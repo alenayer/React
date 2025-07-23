@@ -4,19 +4,22 @@ import type { RootState } from './store';
 
 
 interface ProfileState {
-    username:string;
-    email:string;
-    id:number;
+    user:{
+        username:string;
+        email:string;
+        id:number;
+    } | null;
+   
     loading:boolean;
     error:string | null;
+    isAuth:boolean;
 }
 
 const initialState:ProfileState = {
-    username:'',
-    email:'',
-    id:0,
+    user:null,
     loading:false,
-    error:null
+    error:null,
+    isAuth:!!sessionStorage.getItem('access'),
 }
 
 const profileSlice = createSlice({
@@ -24,12 +27,14 @@ const profileSlice = createSlice({
     initialState,
     reducers:{
         clearProfile:(state)=>{
-            state.username = '',
-            state.id = 0,
-            state.email = '',
+            state.user=null,
             state.loading = false,
             state.error = null
+        },
+        setIsAuth:(state, action)=>{
+            state.isAuth = action.payload;
         }
+        
     },
     extraReducers:(builder) =>{
         builder
@@ -39,9 +44,7 @@ const profileSlice = createSlice({
         })
         .addCase(fetchProfile.fulfilled,(state,action)=>{
             state.loading = false;
-            state.username = action.payload.username;
-            state.email = action.payload.email;
-            state.id = action.payload.id;
+            state.user = action.payload;
             
         })
         .addCase(fetchProfile.rejected, (state,action)=>{
@@ -51,10 +54,12 @@ const profileSlice = createSlice({
     }
 })
 
-export const {clearProfile} = profileSlice.actions;
+export const {clearProfile, setIsAuth} = profileSlice.actions;
 
 export const selectProfile = (state:RootState)=>state.profile;
-export const selectUsername = (state:RootState)=>state.profile.username;
-export const selectEmail = (state:RootState)=>state.profile.email;
+export const selectUsername = (state:RootState)=>state.profile.user?.username;
+export const selectEmail = (state:RootState)=>state.profile.user?.email;
+
+export const selectIsAuth = (state:RootState)=>state.profile.isAuth;
 
 export default profileSlice.reducer;
