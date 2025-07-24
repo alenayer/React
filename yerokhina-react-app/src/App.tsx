@@ -1,4 +1,4 @@
-import { BrowserRouter, Outlet, Route, Routes } from 'react-router';
+import { Outlet, Route, Routes } from 'react-router';
 import { Layout } from './components/Layout/Layout';
 import HomePage from './pages/HomePage';
 import SignInPage from './pages/SignInPage';
@@ -17,16 +17,18 @@ import CreatePostPage from './pages/CreatePostPage';
 import { ActivationPage } from './pages/ActivationPage';
 import { CreatePostOther } from './pages/JsonPlaceholder/CreatePostOther';
 import { CreateUserForm } from './pages/JsonPlaceholder/CreateUserForm';
+import { Albums } from './pages/Albums/Albums';
 
 
 export default function App() {
 
   return (
-    
-      <BrowserRouter>
         <Routes>
           <Route path='/' element={<LayoutWithOutlet title='MyApp' />} >
             <Route index element={<HomePage />} />
+
+            {/* for tests */}
+            <Route path='/albums' element={<Albums/>}/>
 
             {/* с jsonplaceholder */}
             <Route path='/create-post-other' element={<CreatePostOther/>}/>
@@ -60,8 +62,6 @@ export default function App() {
             <Route path='*' element={<NotFound />} />
           </Route>
         </Routes>
-      </BrowserRouter >
-  
   );
 }
 
