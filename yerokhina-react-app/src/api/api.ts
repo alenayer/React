@@ -24,7 +24,7 @@ instance.interceptors.response.use((response) => response, // Pass successful re
             store.dispatch(refreshJwt());
             return;
         }
-        return error;
+        throw error;
     })
 
 export default instance;
